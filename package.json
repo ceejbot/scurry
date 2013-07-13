@@ -27,13 +27,15 @@
 	},
 	"dependencies":
 	{
-		"level-manifest":  "~1.1.1",
-		"level-sublevel":  "~4.7.1",
-		"leveldown-hyper": "~0.5.0",
-		"levelup":         "~0.10.0",
-		"light-cycle":     "~0.0.3",
-		"optimist":        "~0.6.0",
-		"restify":         "~2.6.0",
-		"scuttlebutt":     "~5.6.1"
+		"bunyan":          "~0.21.*",
+		"level-manifest":  "~1.1.*",
+		"level-sublevel":  "~4.7.*",
+		"leveldown-hyper": "~0.5.*",
+		"levelup":         "~0.10.*",
+		"light-cycle":     "~0.0.*",
+		"node-uuid":       "~1.4.*",
+		"optimist":        "~0.6.*",
+		"restify":         "~2.6.*",
+		"scuttlebutt":     "~5.6.*"
 	}
 }
