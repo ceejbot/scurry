@@ -28,18 +28,17 @@
 	},
 	"dependencies":
 	{
-		"bunyan":         "~0.21.*",
-		"crdt":           "~3.5.*",
-		"level-manifest": "~1.1.*",
-		"level-sublevel": "~4.7.*",
-		"leveldown":      "~0.6.*",
-		"levelup":        "~0.10.*",
-		"light-cycle":    "~0.0.*",
-		"node-uuid":      "~1.4.*",
-		"optimist":       "~0.6.*",
-		"p-promise":      "~0.2.*",
-		"request":        "~2.22.*",
-		"restify":        "~2.6.*",
-		"scuttlebutt":    "~5.6.*"
+		"bunyan":         "*",
+		"crdt":           "*",
+		"level-sublevel": "*",
+		"leveldown":      "*",
+		"levelup":        "*",
+		"light-cycle":    "*",
+		"node-uuid":      "*",
+		"optimist":       "*",
+		"p-promise":      "*",
+		"request":        "*",
+		"restify":        "*",
+		"scuttlebutt":    "*"
 	}
 }
