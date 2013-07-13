@@ -1,9 +1,10 @@
 // Pull all the pieces in lib together to construct a server
 
 var
-	storage = require('./lib/storage'),
+	storage   = require('./lib/localnode'),
+	remote    = require('./lib/remotenode'),
 	endpoints = require('./lib/endpoints'),
-	mesh = require('./lib/mesh')
+	mesh      = require('./lib/mesh')
 	;
 
 // optimist
