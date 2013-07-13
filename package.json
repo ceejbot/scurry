@@ -1,0 +1,35 @@
+{
+	"name":        "scurry",
+	"version":     "0.0.1",
+	"description": "scuttlebutt + leveldb == madness",
+	"main":        "index.js",
+	"scripts":
+	{
+		"test": "mocha -R spec test/test*.js"
+	},
+	"repository":
+	{
+		"type": "git",
+		"url":  "https://github.com/ceejbot/scurry"
+	},
+	"keywords":
+	[
+		"leveldb",
+		"scuttlebutt"
+	],
+	"author":         "C J Silverio <ceejceej@gmail.com>",
+	"license":        "MIT",
+	"readmeFilename": "README.md",
+	"gitHead":        "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
+	"bugs":
+	{
+		"url": "https://github.com/ceejbot/scurry/issues"
+	},
+	"dependencies":
+	{
+		"scuttlebutt":     "~5.6.1",
+		"levelup":         "~0.10.0",
+		"leveldown-hyper": "~0.5.0",
+		"level-sublevel":  "~4.7.1"
+	}
+}
