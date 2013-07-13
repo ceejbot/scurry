@@ -32,6 +32,7 @@
 		"leveldown-hyper": "~0.5.0",
 		"levelup":         "~0.10.0",
 		"light-cycle":     "~0.0.3",
+		"optimist":        "~0.6.0",
 		"restify":         "~2.6.0",
 		"scuttlebutt":     "~5.6.1"
 	}
