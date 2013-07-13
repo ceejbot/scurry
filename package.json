@@ -30,6 +30,8 @@
 		"scuttlebutt":     "~5.6.1",
 		"levelup":         "~0.10.0",
 		"leveldown-hyper": "~0.5.0",
-		"level-sublevel":  "~4.7.1"
+		"level-sublevel":  "~4.7.1",
+		"level-manifest":  "~1.1.1",
+		"light-cycle":     "~0.0.3"
 	}
 }
