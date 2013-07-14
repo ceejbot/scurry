@@ -3,7 +3,7 @@ scurry
 
 A leveldb-backed consistent hash ring, for your toy caching needs. Seriously unfinished; do not put data in this. No really, don't.
 
-## Mix in a cocktail shaker
+## One part each
 
 Rod Vagg's [levelup](https://github.com/rvagg/node-levelup) leveldb bindings for node + [sublevel](https://github.com/dominictarr/level-sublevel) to create buckets.
 
