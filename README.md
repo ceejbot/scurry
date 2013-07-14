@@ -17,14 +17,14 @@ Dominic Tarr's [crtd](https://github.com/dominictarr/crdt), which uses his [scut
 
 Run a server:
 
-`node index.js --id=node-one -s -p 3333 -g 4114 -d ./db | ./node_modules/.bin/bunyan -o short`
+`node index.js --id=node-one -m -p 3333 -g 4114 -d ./db | ./node_modules/.bin/bunyan -o short`
 
 Run a client or five:
 
 ```shell
-node index.js --id=node-two -p 3334 -g 4114 -h 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short
-node index.js --id=node-three -p 3335 -g 4114 -h 10.0.0.5 -d ./db3 | ./node_modules/.bin/bunyan -o short`
-node index.js --id=node-four -p 3336 -g 4114 -h 10.0.0.5 -d ./db4 | ./node_modules/.bin/bunyan -o short
+node index.js --id=node-two -p 3334 -g 4114 -s 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short
+node index.js --id=node-three -p 3335 -g 4114 -s 10.0.0.5 -d ./db3 | ./node_modules/.bin/bunyan -o short
+node index.js --id=node-four -p 3336 -g 4114 -s 10.0.0.5 -d ./db4 | ./node_modules/.bin/bunyan -o short
 ```
 
 Replace `10.0.0.5` with the IP address of your server.
@@ -48,8 +48,6 @@ Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
 - Need to pay attention to content encodings & store them with the documents as metadata.
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
 - Reconnect on errors.
-- Clean up configuration & options.
-- Create directories for dbs if they don't exist.
 - Error handling.
 - Better logging.
 - Light-cycle is rickety; bullet-proof it.
