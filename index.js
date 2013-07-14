@@ -31,6 +31,7 @@ var opts =
 	localip:    localip,
 	master:     optimist.argv.server
 };
+
 var mesh = new Mesh(opts);
 
 
