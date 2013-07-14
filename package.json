@@ -9,7 +9,9 @@
 	"scripts":
 	{
 		"start": "node index.js",
-		"test":  "mocha -R spec test/test*.js"
+		"test":  "mocha -R spec test/test*.js",
+		"node1": "node index.js --id=node-one -s -p 3332 -g 4114 -d ./db | ./node_modules/.bin/bunyan -o short",
+		"node2": "node index.js --id=node-two -p 3333 -g 4114 -h 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short"
 	},
 	"repository":
 	{
