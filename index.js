@@ -27,8 +27,9 @@ var opts =
 	dbpath:     optimist.argv.dbpath,
 	gossipport: optimist.argv.gossip,
 	port:       optimist.argv.port,
-	host:       optimist.argv.host || localip,
-	server:     optimist.argv.server
+	host:       optimist.argv.host,
+	localip:    localip,
+	master:     optimist.argv.server
 };
 var mesh = new Mesh(opts);
 
