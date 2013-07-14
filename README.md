@@ -9,7 +9,7 @@ Rod Vagg's [levelup](https://github.com/rvagg/node-levelup) leveldb bindings for
 
 Dominic Tarr's [crtd](https://github.com/dominictarr/crdt), which uses his [scuttlebutt implementation](https://github.com/dominictarr/scuttlebutt) to keep a document in sync.
 
-[light-cycle](https://github.com/ceejbot/light-cycle), the lightweight consistent hash ring I wrote recently.
+[light-cycle](https://github.com/ceejbot/light-cycle), a lightweight consistent hash ring structure that can be mixed into most anything.
 
 [restify](http://mcavage.me/node-restify/) to provide a simple RESTful api to data in the buckets.
 
@@ -39,3 +39,18 @@ http -f PUT 10.0.0.5:3335/vodkas/2 name="Tito's Handmade" rating=5
 ```
 
 Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
+
+(Human-friendly shell commands courtesy of [httpie](https://github.com/jkbr/httpie).)
+
+## TODO
+
+- The RESTful server is a mess. 
+- Need to pay attention to content encodings & store them with the documents as metadata.
+- Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
+- Reconnect on errors.
+- Clean up configuration & options.
+- Create directories for dbs if they don't exist.
+- Error handling.
+- Better logging.
+- Light-cycle is rickety; bullet-proof it.
+- Stretch goal: replication? 

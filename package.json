@@ -1,7 +1,7 @@
 {
 	"name":           "scurry",
 	"version":        "0.0.1",
-	"description":    "scuttlebutt + leveldb == madness",
+	"description":    "A leveldb-backed consistent hash ring, for your toy caching needs.",
 	"author":         "C J Silverio <ceejceej@gmail.com>",
 	"license":        "MIT",
 	"readmeFilename": "README.md",
