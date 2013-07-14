@@ -1,6 +1,6 @@
 {
 	"name":           "scurry",
-	"version":        "0.0.1",
+	"version":        "0.0.2",
 	"description":    "A leveldb-backed consistent hash ring, for your toy caching needs.",
 	"author":         "C J Silverio <ceejceej@gmail.com>",
 	"license":        "MIT",
@@ -11,7 +11,8 @@
 		"start": "node index.js",
 		"test":  "mocha -R spec test/test*.js",
 		"node1": "node index.js --id=node-one -s -p 3332 -g 4114 -d ./db | ./node_modules/.bin/bunyan -o short",
-		"node2": "node index.js --id=node-two -p 3333 -g 4114 -h 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short"
+		"node2": "node index.js --id=node-two -p 3333 -g 4114 -h 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short",
+		"node3": "node index.js --id=node-three -p 3334 -g 4114 -h 10.0.0.5 -d ./db3 | ./node_modules/.bin/bunyan -o short"
 	},
 	"repository":
 	{
@@ -40,7 +41,6 @@
 		"node-uuid":      "*",
 		"optimist":       "*",
 		"p-promise":      "*",
-		"request":        "*",
 		"restify":        "*",
 		"scuttlebutt":    "*"
 	}
