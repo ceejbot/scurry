@@ -1,7 +1,8 @@
 // Pull all the pieces in lib together to construct a server
 
 var
-	Mesh      = require('./lib/mesh')
+	Mesh      = require('./lib/mesh'),
+	localip   = require("my-local-ip")(),
 	optimist  = require('optimist')
 		.usage('Run a single node in the mesh.\nUsage: $0 --id=node-one -p 3000 -g 4114 --dbpath=./db')
 		.alias('d', 'dbpath')
@@ -20,7 +21,8 @@ var opts =
 	id:         optimist.argv.id,
 	dbpath:     optimist.argv.dbpath,
 	gossipport: optimist.argv.gossip,
-	port:       optimist.argv.port
+	port:       optimist.argv.port,
+	host:       localip
 };
 var mesh = new Mesh(opts);
 

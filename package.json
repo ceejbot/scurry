@@ -34,6 +34,7 @@
 		"leveldown":      "*",
 		"levelup":        "*",
 		"light-cycle":    "*",
+		"my-local-ip":    "*",
 		"node-uuid":      "*",
 		"optimist":       "*",
 		"p-promise":      "*",
