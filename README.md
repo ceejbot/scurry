@@ -42,10 +42,19 @@ Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
 
 (Human-friendly shell commands courtesy of [httpie](https://github.com/jkbr/httpie).)
 
+## Garnish with a twist of orange peel
+
+### TTLs
+
+Send this header: `X-Scurry-TTL: [seconds]` to specify a time-to-live for your cached data. (This feature is not working yet. Need to figure out how to make the sublevel plugin work with the ttl plugin.)
+
+### Conditional requests
+
+Scurry sends an ETag header and a last-modified timestamp.
+
 ## TODO
 
-- The RESTful server is a mess. 
-- Need to pay attention to content encodings & store them with the documents as metadata.
+- The RESTful server is an improving mess. 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
 - Reconnect on errors.
 - Error handling.

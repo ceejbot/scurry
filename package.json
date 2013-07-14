@@ -34,6 +34,7 @@
 		"bunyan":         "*",
 		"crdt":           "*",
 		"level-sublevel": "*",
+		"level-ttl":      "*",
 		"leveldown":      "*",
 		"levelup":        "*",
 		"light-cycle":    "*",
