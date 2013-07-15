@@ -1,0 +1,7 @@
+{
+	"id":     "node-two",
+	"server": "10.0.0.5",
+	"gossip": 4114,
+	"api":    3334,
+	"dbpath": "./db2"
+}
