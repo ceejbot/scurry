@@ -67,13 +67,15 @@ Scurry sends an ETag header and a last-modified timestamp.
 ## TODO
 
 - The goal of release 0.0.3 is testability & a lot of tests.
+- Release 0.0.4 will probably make streaming keys work, maybe.
 - The RESTful server is an improving mess. 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
 - Reconnect on errors.
 - Error handling.
-- Better logging.
+- Better logging. Configurable, for one thing.
 - Light-cycle is rickety; bullet-proof it.
 - Stretch goal: replication? 
 - Back ends should be pluggable; the API is very small.
 - Consider integrating with @rvagg's level-cache module as a back end. (Would need to do the etag/last-mod calc at a higher level.)
-- 
+
+
