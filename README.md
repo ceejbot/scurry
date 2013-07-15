@@ -1,9 +1,9 @@
 scurry
 ======
 
-A leveldb-backed consistent hash ring, for your toy caching needs. Seriously unfinished; do not put data in this. No really, don't.
+A leveldb-backed consistent hash ring, for your caching needs. Seriously unfinished; do not put data in this. No really, don't.
 
-[![NPM](http://nodei.co/npm/scurry.png)](http://nodei.co/npm/scurry/)
+[![NPM](https://nodei.co/npm/scurry.png)](https://nodei.co/npm/scurry/)
 
 ## One part each
 
@@ -46,9 +46,18 @@ Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
 
 ## Garnish with a twist of orange peel
 
+API endpoints exposed:
+
+- `GET /:bucket`: stream sorted keys for a bucket (not yet working)
+- `POST /:bucket`: add an item to the cache; id is generated for you & returned
+- `PUT /:bucket/:id`: add/update an item in the cache; 204 response
+- `GET /:bucket/:id`: get an item from the cache
+- `HEAD /:bucket/:id`: headers for an item
+- `DEL /:bucket/:id`: remove an item
+
 ### TTLs
 
-Send this header: `X-Scurry-TTL: [seconds]` to specify a time-to-live for your cached data. (This feature is not working yet. Need to figure out how to make the sublevel plugin work with the ttl plugin.)
+Send this header to specify a time-to-live for your cached data: `X-Scurry-TTL: [seconds]`
 
 ### Conditional requests
 
