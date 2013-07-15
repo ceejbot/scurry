@@ -1,7 +1,7 @@
 scurry
 ======
 
-A leveldb-backed consistent hash ring, for your caching needs. Seriously unfinished; do not put data in this. No really, don't.
+A leveldb-backed consistent hash ring, for your caching needs. I can see the day when you might want to put data in this & feel reasonably sort of confident you might get it back out again. If this scares you, it's supposed to.
 
 [![NPM](https://nodei.co/npm/scurry.png)](https://nodei.co/npm/scurry/)
 
@@ -38,6 +38,7 @@ Then stuff some data in:
 ```shell
 http -f PUT 10.0.0.5:3334/vodkas/1 name="Sobieski" rating=5
 http -f PUT 10.0.0.5:3335/vodkas/2 name="Tito's Handmade" rating=5
+http -f PUT 10.0.0.5:3335/vodkas/3 name="Tito's Handmade" rating=5
 ```
 
 Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
@@ -65,6 +66,7 @@ Scurry sends an ETag header and a last-modified timestamp.
 
 ## TODO
 
+- The goal of release 0.0.3 is testability & a lot of tests.
 - The RESTful server is an improving mess. 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
 - Reconnect on errors.
@@ -72,3 +74,6 @@ Scurry sends an ETag header and a last-modified timestamp.
 - Better logging.
 - Light-cycle is rickety; bullet-proof it.
 - Stretch goal: replication? 
+- Back ends should be pluggable; the API is very small.
+- Consider integrating with @rvagg's level-cache module as a back end. (Would need to do the etag/last-mod calc at a higher level.)
+- 
