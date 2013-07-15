@@ -10,9 +10,9 @@
 	{
 		"start": "node index.js",
 		"test":  "mocha -R spec test/test*.js",
-		"node1": "node index.js --id=node-one -p 3332 -g 4114 -m -d ./db | ./node_modules/.bin/bunyan -o short",
-		"node2": "node index.js --id=node-two -p 3333 -g 4114 -s 10.0.0.5 -d ./db2 | ./node_modules/.bin/bunyan -o short",
-		"node3": "node index.js --id=node-three -p 3334 -g 4114 -s 10.0.0.5 -d ./db3 | ./node_modules/.bin/bunyan -o short"
+		"node1": "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
+		"node2": "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
+		"node3": "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short"
 	},
 	"repository":
 	{
