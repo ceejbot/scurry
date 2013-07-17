@@ -5,6 +5,10 @@ A leveldb-backed consistent hash ring, for your caching needs. I can see the day
 
 [![NPM](https://nodei.co/npm/scurry.png)](https://nodei.co/npm/scurry/)
 
+[![Build Status](https://secure.travis-ci.org/ceejbot/scurry.png)](http://travis-ci.org/ceejbot/scurry)
+[![Dependencies](https://david-dm.org/ceejbot/scurry.png)](https://david-dm.org/ceejbot/scurry)  
+[![Coverage Status](https://coveralls.io/repos/ceejbot/scurry/badge.png)](https://coveralls.io/r/ceejbot/scurry)
+
 ## One part each
 
 Rod Vagg's [levelup](https://github.com/rvagg/node-levelup) leveldb bindings for node + [sublevel](https://github.com/dominictarr/level-sublevel) to create buckets.
