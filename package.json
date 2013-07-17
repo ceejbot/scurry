@@ -1,6 +1,6 @@
 {
 	"name":           "scurry",
-	"version":        "0.0.2",
+	"version":        "0.0.3",
 	"description":    "A leveldb-backed consistent hash ring, for your toy caching needs.",
 	"author":         "C J Silverio <ceejceej@gmail.com>",
 	"license":        "MIT",
@@ -8,11 +8,21 @@
 	"main":           "index.js",
 	"scripts":
 	{
-		"start": "node index.js",
-		"test":  "mocha -R spec test/test*.js",
-		"node1": "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
-		"node2": "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
-		"node3": "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short"
+		"start":      "node index.js --id=server -m -g 4114 -p 3333 --dbpath=./db | ./node_modules/.bin/bunyan -o short",
+		"node1":      "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
+		"node2":      "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
+		"node3":      "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short",
+		"test":       "npm run test-basic && npm run test-cov && npm run coveralls",
+		"test-basic": "./node_modules/.bin/mocha -R spec test/*.js",
+		"test-cov":   "./node_modules/.bin/mocha --require blanket -R travis-cov test/*.js",
+		"coverage":   "./node_modules/.bin/mocha --require blanket -R html-cov test/*.js > test/coverage.html",
+		"coveralls":  "NODE_ENV=test YOURPACKAGE_COVERAGE=1 ./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter test/*.js | ./node_modules/coveralls/bin/coveralls.js",
+		"blanket":
+		{
+			"pattern": "//^((?!\/test|examples|node_modules\/).)*$/ig",
+			"onlyCwd": true
+		},
+		"travis-cov": { "threshold": 90 }
 	},
 	"repository":
 	{
@@ -22,7 +32,8 @@
 	"keywords":
 	[
 		"leveldb",
-		"scuttlebutt"
+		"scuttlebutt",
+		"autosharding"
 	],
 	"gitHead":        "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
 	"bugs":
@@ -44,5 +55,14 @@
 		"p-promise":      "*",
 		"restify":        "*",
 		"scuttlebutt":    "*"
+	},
+	"devDependencies":
+	{
+		"blanket":             "*",
+		"chai":                "*",
+		"mocha":               "*",
+		"travis-cov":          "*",
+		"mocha-lcov-reporter": "*",
+		"coveralls":           "*"
 	}
 }
