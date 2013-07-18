@@ -264,18 +264,89 @@ describe('LocalNode', function()
 			.done();
 		});
 
-		it('returns an empty value for non-existent keys');
+		it('returns an empty value for non-existent keys', function(done)
+		{
+			node.get('bucket', '12')
+			.then(function(result)
+			{
+				assert.equal(result, null, 'expected null for non-existent keys!');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
 	});
 
 	describe('del()', function()
 	{
-		it('removes an item from storage');
-		it('is silent when removing an item that does not exist');
+		it('returns a promise', function()
+		{
+			var result = node.del('bucket', '1');
+			assert.ok(result.then);
+			assert.equal(typeof result.then, 'function', 'not a promise');
+		});
+
+		it('removes an item from storage', function(done)
+		{
+			node.get('bucket', '1')
+			.then(function(result)
+			{
+				assert.equal(result, null, 'expected null for a deleted key');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
+		it('is silent when removing an item that does not exist', function(done)
+		{
+			node.del('bucket', '1')
+			.then(function(reply)
+			{
+				assert.ok(reply);
+				assert.equal(reply, 'OK');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
 	});
 
 	describe('TTLs', function()
 	{
 		it('has TTL tests');
+	});
+
+	describe('keystreams', function()
+	{
+
+	});
+
+	describe('shutdown', function()
+	{
+		it('closes the db', function(done)
+		{
+			node.shutdown()
+			.then(function(reply)
+			{
+				// silence on success?
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
 	});
 
 	after(function()
