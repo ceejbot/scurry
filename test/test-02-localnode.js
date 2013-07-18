@@ -21,6 +21,8 @@ function nodeFixture()
 
 describe('LocalNode', function()
 {
+	var node = nodeFixture();
+
 	describe('constructor', function()
 	{
 		it('throws if no options passed', function()
@@ -104,8 +106,6 @@ describe('LocalNode', function()
 
 	describe('set()', function()
 	{
-		var node = nodeFixture();
-
 		it('requires that you pass a string bucket', function()
 		{
 			function shouldThrow()
@@ -141,12 +141,130 @@ describe('LocalNode', function()
 			}).done();
 		});
 
-		it('has tests that verify what it stores in the db');
+		it('stores an object with crc & modification timestamp', function(done)
+		{
+			node.get('bucket', '1')
+			.then(function(result)
+			{
+				assert.ok(result, 'did not find a value!');
+				assert.equal(typeof result, 'object', 'did not store an object');
+				assert.ok(result.ts, 'no timestamp');
+				assert.equal(typeof result.ts, 'number');
+				assert.ok(result.etag, 'no etag hash');
+				assert.ok(result.payload, 'no payload holding the value');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
+		it('stores strings successfully', function(done)
+		{
+			node.get('bucket', '1')
+			.then(function(result)
+			{
+				assert.ok(result.payload, 'no payload holding the value');
+				assert.equal(typeof result.payload, 'string');
+				assert.equal(result.payload, 'I am a value.');
+
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
+		it('stores buffers successfully', function(done)
+		{
+			var buf = new Buffer(8);
+			buf.fill(1);
+
+			node.set('bucket', '2', buf)
+			.then(function()
+			{
+				return node.get('bucket', '2');
+			})
+			.then(function(result)
+			{
+				assert.ok(result.payload, 'no payload holding the value');
+				assert.ok(Buffer.isBuffer(result.payload));
+				assert.equal(result.payload.length, 8);
+				assert.equal(result.payload[0], 1);
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
+		it('stores objects successfully', function(done)
+		{
+			var value =
+			{
+				foo: 'foo',
+				bar: 'bar',
+				baz: ['hunt', 'the', 'wumpus']
+			};
+
+			node.set('bucket', '3', value)
+			.then(function()
+			{
+				return node.get('bucket', '3');
+			})
+			.then(function(result)
+			{
+				var stored = result.payload;
+				assert.ok(stored, 'no payload holding the value');
+				assert.equal(typeof stored, 'object', 'did not get an object back');
+				assert.ok(stored.foo);
+				assert.equal(stored.foo, 'foo');
+				assert.ok(stored.bar);
+				assert.equal(stored.bar, 'bar');
+				assert.ok(stored.baz);
+				assert.ok(Array.isArray(stored.baz), 'array subitem not stored correctly');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
 	});
 
 	describe('get()', function()
 	{
-		it('has tests for get()');
+		it('returns a promise', function()
+		{
+			var result = node.get('bucket', '1');
+			assert.ok(result.then);
+			assert.equal(typeof result.then, 'function', 'not a promise');
+		});
+
+		it('can fetch a previously-stored value', function(done)
+		{
+			node.get('bucket', '1')
+			.then(function(result)
+			{
+				assert.ok(result, 'did not find a value!');
+				done();
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
+
+		it('returns an empty value for non-existent keys');
 	});
 
 	describe('del()', function()
