@@ -41,10 +41,11 @@ else
 		api:     optimist.argv.port,
 		gossip:  optimist.argv.gossip,
 		server:  optimist.argv.server,
-		localip: localip,
 		master:  optimist.argv.master
 	};
 }
+
+opts.localip = localip;
 
 var mesh = new Mesh(opts);
 process.on('SIGINT', mesh.disconnect.bind(mesh));

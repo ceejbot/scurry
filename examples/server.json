@@ -3,5 +3,5 @@
 	"master": true,
 	"gossip": 4114,
 	"api":    3333,
-	"dbpath": "./db"
+	"dbpath": "./examples/db"
 }
