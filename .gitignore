@@ -18,3 +18,5 @@ db
 db2
 db3
 .DS_Store
+
+coverage.html

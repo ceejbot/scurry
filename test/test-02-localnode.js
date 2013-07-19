@@ -13,7 +13,7 @@ var LocalNode = require('../lib/localnode');
 
 function nodeFixture()
 {
-	var opts = { id: 'test-id', dbpath: './test/t3' };
+	var opts = { id: 'test-id', dbpath: './test/t3', checkFrequency: 1000 };
 	var node = new LocalNode(opts);
 
 	return node;
@@ -323,12 +323,53 @@ describe('LocalNode', function()
 
 	describe('TTLs', function()
 	{
-		it('has TTL tests');
+		it('can set a TTL on a key', function(done)
+		{
+			function checkKey()
+			{
+				node.get('bucket', '4')
+				.then(function(value)
+				{
+					should.not.exist(value);
+					done();
+				}).done();
+			}
+
+			node.set('bucket', '4', 'dead value walking', 1)
+			.then(function(reply)
+			{
+				setTimeout(checkKey, 1500);
+			})
+			.fail(function(err)
+			{
+				should.not.exist(err);
+			})
+			.done();
+		});
 	});
 
-	describe('keystreams', function()
+	describe('keys()', function()
 	{
+		it('gets keys() for the given bucket', function(done)
+		{
+			var keys = [];
+			var kstream = node.keys('bucket');
+			assert.ok(kstream.on);
+			assert.equal(typeof kstream.on, 'function');
 
+			kstream.on('data', function(key)
+			{
+				keys.push(key);
+			});
+
+			kstream.on('end', function()
+			{
+				assert.equal(keys.length, 2);
+				assert.equal(keys[0], '2');
+				assert.equal(keys[1], '3');
+				done();
+			});
+		});
 	});
 
 	describe('shutdown', function()
