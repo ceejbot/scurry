@@ -22,7 +22,7 @@
 			"pattern": "//^((?!\/test|examples|node_modules\/).)*$/ig",
 			"onlyCwd": true
 		},
-		"travis-cov": { "threshold": 90 }
+		"travis-cov": { "threshold": 30 }
 	},
 	"repository":
 	{
