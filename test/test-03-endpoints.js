@@ -3,14 +3,13 @@
 var
 	chai       = require('chai'),
 	assert     = chai.assert,
-	expect     = chai.expect,
+	// expect     = chai.expect,
 	should     = chai.should()
 	;
 
 var
 	endpoints = require('../lib/endpoints'),
 	MockMesh  = require('./mocks/mesh'),
-	restify   = require('restify'),
 	http      = require('http')
 	;
 
@@ -66,6 +65,7 @@ describe('REST api', function()
 			function shouldThrow()
 			{
 				var m = endpoints.createServer();
+				assert.ok(m);
 			}
 			shouldThrow.should.throw(Error);
 		});
@@ -95,7 +95,7 @@ describe('REST api', function()
 			{
 				path: '/ping',
 				method: 'GET'
-			}
+			};
 			requestFromTestServer(opts, null, true, function(err, response, body)
 			{
 				should.not.exist(err);
@@ -104,11 +104,6 @@ describe('REST api', function()
 				done();
 			});
 		});
-	});
-
-	describe('GET /:bucket', function()
-	{
-		it('key streaming is implemented!');
 	});
 
 	describe('POST /:bucket', function()
@@ -148,7 +143,7 @@ describe('REST api', function()
 				method: 'PUT',
 			};
 
-			requestFromTestServer(opts, JSON.stringify(obj1), false, function(err, response, body)
+			requestFromTestServer(opts, JSON.stringify(obj1), false, function(err, response)
 			{
 				should.not.exist(err);
 				assert.equal(response.statusCode, 204);
@@ -206,7 +201,7 @@ describe('REST api', function()
 				method: 'GET',
 			};
 
-			requestFromTestServer(opts, null, true, function(err, response, body)
+			requestFromTestServer(opts, null, true, function(err, response)
 			{
 				should.not.exist(err);
 				assert.equal(response.statusCode, 200);
@@ -230,7 +225,7 @@ describe('REST api', function()
 				method: 'HEAD',
 			};
 
-			requestFromTestServer(opts, null, false, function(err, response, body)
+			requestFromTestServer(opts, null, false, function(err, response)
 			{
 				should.not.exist(err);
 				assert.equal(response.statusCode, 200);
@@ -241,6 +236,42 @@ describe('REST api', function()
 				done();
 			});
 		});
+	});
+
+	describe('GET /:bucket', function()
+	{
+		it('responds with a key stream', function(done)
+		{
+			var opts =
+			{
+				path:   '/test',
+				method: 'GET',
+			};
+
+			requestFromTestServer(opts, null, false, function(err, response)
+			{
+				should.not.exist(err);
+				assert.equal(response.statusCode, 200);
+				var count = 0;
+
+				response.on('data', function(chunk)
+				{
+					count++;
+					// console.log(chunk);
+				});
+
+				response.on('end', function()
+				{
+					// assert.equal(count, 2);
+					done();
+				});
+			});
+
+		});
+
+		it('responds with a complete key stream from all nodes');
+		it('responds with a key stream in lexical order');
+
 	});
 
 	describe('DEL /:bucket/:id', function()
@@ -255,7 +286,7 @@ describe('REST api', function()
 				method: 'DELETE',
 			};
 
-			requestFromTestServer(opts, null, false, function(err, response, body)
+			requestFromTestServer(opts, null, false, function(err, response)
 			{
 				should.not.exist(err);
 				assert.equal(response.statusCode, 204);

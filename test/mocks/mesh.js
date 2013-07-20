@@ -1,7 +1,9 @@
 var
 	crypto     = require('crypto'),
 	Lightcycle = require('light-cycle'),
-	P          = require('p-promise')
+	P          = require('p-promise'),
+	stream     = require('stream'),
+	util       = require('util')
 	;
 
 var MockMesh = module.exports = function MockMesh(opts)
@@ -63,5 +65,25 @@ MockNode.prototype.del = function(bucket, id)
 
 MockNode.prototype.keys = function(bucket)
 {
-	return P(Object.keys(this.store[bucket]));
+	var keys = [];
+	if (this.store[bucket])
+		keys = Object.keys(this.store[bucket]);
+
+	// make a stream & respond with them
+	var out = new Keystream(keys);
+	return out;
+};
+
+function Keystream(keys)
+{
+ 	stream.Readable.call(this, { objectMode : true });
+ 	this.keys = keys;
+}
+util.inherits(Keystream, stream.Readable);
+
+Keystream.prototype._read = function(size)
+{
+	if (!this.keys.length)
+		return this.push(null);
+	this.push(JSON.stringify(this.keys.shift()));
 };
