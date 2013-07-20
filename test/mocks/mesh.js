@@ -16,12 +16,10 @@ var MockMesh = module.exports = function MockMesh(opts)
 	}
 };
 
-MockMesh.prototype.locate = function(bucket, key)
+MockMesh.prototype.locate = function(bucket, id)
 {
-	var node = this.cycle.locate(bucket + '/' + id);
-	return node;
+	return this.cycle.locate(bucket + '/' + id);
 };
-
 
 function MockNode(id)
 {
@@ -50,7 +48,7 @@ MockNode.prototype.set = function(bucket, id, value, ttl)
 		ts:      Date.now(),
 		etag:    crc.update(JSON.stringify(value)).digest('hex')
 	};
-	this.store.bucket = item;
+	this.store[bucket][id] = item;
 
 	return P('OK');
 };
