@@ -42,12 +42,12 @@ Then stuff some data in:
 ```shell
 http -f PUT 10.0.0.5:3334/vodkas/1 name="Sobieski" rating=5
 http -f PUT 10.0.0.5:3335/vodkas/2 name="Tito's Handmade" rating=5
-http -f PUT 10.0.0.5:3335/vodkas/3 name="Tito's Handmade" rating=5
+http -f PUT 10.0.0.5:3335/vodkas/3 name="Bimber" rating=4
 ```
 
 Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
 
-(Human-friendly shell commands courtesy of [httpie](https://github.com/jkbr/httpie).)
+(Human-friendly shell commands courtesy of [httpie](https://github.com/jkbr/httpie)).
 
 ## Garnish with a twist of orange peel
 
@@ -72,6 +72,8 @@ Scurry sends an ETag header and a last-modified timestamp.
 
 - The goal of release 0.0.3 is testability & a lot of tests.
 - Release 0.0.4 will probably make streaming keys work, maybe.
+
+
 - The RESTful server is an improving mess. 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
 - Reconnect on errors.
@@ -80,6 +82,5 @@ Scurry sends an ETag header and a last-modified timestamp.
 - Light-cycle is rickety; bullet-proof it.
 - Stretch goal: replication? 
 - Back ends should be pluggable; the API is very small.
-- Consider integrating with @rvagg's level-cache module as a back end. (Would need to do the etag/last-mod calc at a higher level.)
 
 

@@ -9,6 +9,15 @@ var
 
 var Mesh = require('../lib/mesh');
 
+var testOptions =
+{
+	id:     'testmesh',
+	gossip: 4114,
+	api:    3000
+};
+
+var testmesh;
+
 describe('Mesh', function()
 {
 	describe('constructor', function()
@@ -22,6 +31,7 @@ describe('Mesh', function()
 			}
 			shouldThrow.should.throw(Error);
 		});
+
 		it('demands a `gossip` port option', function()
 		{
 			function shouldThrow()
@@ -82,7 +92,20 @@ describe('Mesh', function()
 			assert.equal(typeof m.restify.listen, 'function');
 		});
 
-		it('creates a lightcycle hash ring of the specified size');
+		it('creates a lightcycle hash ring of the specified size', function()
+		{
+			var m = new Mesh(
+			{
+				id:     'testmesh',
+				gossip: 4114,
+				api:    3000
+			});
+
+			assert.ok(m.restify);
+			assert.equal(typeof m.restify, 'object');
+			assert.ok(m.restify.listen);
+			assert.equal(typeof m.restify.listen, 'function');
+		});
 
 		it('creates a CRDT document', function()
 		{
@@ -114,7 +137,16 @@ describe('Mesh', function()
 
 	describe('locate()', function()
 	{
-		it('demands bucket and id arguments');
+		it('demands bucket and id arguments', function()
+		{
+			function shouldThrow()
+			{
+				testmesh.locate();
+			}
+
+			shouldThrow.should.throw(Error);
+		});
+
 		it('creates a hash ring key by joining the arguments with /');
 		it('returns the matching node from the hash ring');
 	});
@@ -148,7 +180,5 @@ describe('Mesh', function()
 		it('calls leave()');
 		it('shuts down all servers');
 	});
-
-
 
 });
