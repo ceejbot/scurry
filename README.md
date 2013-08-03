@@ -68,10 +68,26 @@ Send this header to specify a time-to-live for your cached data: `X-Scurry-TTL: 
 
 Scurry sends an ETag header and a last-modified timestamp.
 
+### Storage format
+
+As of version 0.0.3, the data stored in the LevelDB nodes is json structured as follows:
+
+```javascript
+{
+    ts:             Date.now(),              // timestamp of last set()
+    payload:        value,                   // base64-encoded string if buffer, JSON string if not
+    etag:           crc.digest('hex'),       // md5 hex digest of payload
+    base64:         valueIsB64String,        // true if the payload had to be base64 encoded
+    'content-type': metadata['content-type'] // content-type if passed in
+};
+
+```
+
 ## TODO
 
-- The goal of release 0.0.3 is testability & a lot of tests.
 - Release 0.0.4 will probably make streaming keys work, maybe.
+- Release 0.0.5 will finalize the storage format.
+- Release 0.0.6 will contemplate eviction.
 
 
 - The RESTful server is an improving mess. 
