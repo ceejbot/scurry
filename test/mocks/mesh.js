@@ -38,7 +38,7 @@ MockNode.prototype.get = function(bucket, id)
 	return P(null);
 };
 
-MockNode.prototype.set = function(bucket, id, value, ttl)
+MockNode.prototype.set = function(bucket, id, value, metadata)
 {
 	if (!this.store[bucket])
 		this.store[bucket] = {};
@@ -46,9 +46,10 @@ MockNode.prototype.set = function(bucket, id, value, ttl)
 	var crc = crypto.createHash('md5');
 	var item =
 	{
-		payload: value,
-		ts:      Date.now(),
-		etag:    crc.update(JSON.stringify(value)).digest('hex')
+		payload:        value,
+		ts:             Date.now(),
+		etag:           crc.update(JSON.stringify(value)).digest('hex'),
+		'content-type': metadata['content-type']
 	};
 	this.store[bucket][id] = item;
 
@@ -76,8 +77,8 @@ MockNode.prototype.keys = function(bucket)
 
 function Keystream(keys)
 {
- 	stream.Readable.call(this, { objectMode : true });
- 	this.keys = keys;
+	stream.Readable.call(this, { objectMode : true });
+	this.keys = keys;
 }
 util.inherits(Keystream, stream.Readable);
 

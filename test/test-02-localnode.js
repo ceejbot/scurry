@@ -238,6 +238,32 @@ describe('LocalNode', function()
 			.done();
 		});
 
+		it('stores binary data successfully', function(done)
+		{
+			fs.readFile('./test/mocks/data.png', function(err, data)
+			{
+				should.not.exist(err);
+				node.set('bucket', '4', data, { 'content-type': 'image/png' })
+				.then(function()
+				{
+					return node.get('bucket', '4');
+				})
+				.then(function(result)
+				{
+					var stored = result.payload;
+					assert.ok(stored, 'no payload holding the value');
+					assert.ok(Buffer.isBuffer(stored), 'did not get a buffer back');
+					assert.equal(result['content-type'], 'image/png', 'content type was not stored');
+					done();
+				})
+				.fail(function(err)
+				{
+					should.not.exist(err);
+				})
+				.done();
+			});
+		});
+
 	});
 
 	describe('get()', function()
@@ -335,7 +361,7 @@ describe('LocalNode', function()
 				}).done();
 			}
 
-			node.set('bucket', '4', 'dead value walking', 1)
+			node.set('bucket', '4', 'dead value walking', { ttl: 1 })
 			.then(function(reply)
 			{
 				setTimeout(checkKey, 1500);
