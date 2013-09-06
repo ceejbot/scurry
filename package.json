@@ -54,7 +54,8 @@
 		"optimist":       "*",
 		"p-promise":      "*",
 		"restify":        "*",
-		"scuttlebutt":    "*"
+		"scuttlebutt":    "*",
+		"stream-joins":   "*"
 	},
 	"devDependencies":
 	{

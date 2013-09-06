@@ -70,10 +70,11 @@ Scurry sends an ETag header and a last-modified timestamp.
 
 ### Storage format
 
-As of version 0.0.3, the data stored in the LevelDB nodes is json structured as follows:
+As of version 0.0.4, the data stored in the LevelDB nodes is json structured as follows:
 
 ```javascript
 {
+	version:        1,                       // storage version
     ts:             Date.now(),              // timestamp of last set()
     payload:        value,                   // base64-encoded string if buffer, JSON string if not
     etag:           crc.digest('hex'),       // md5 hex digest of payload
@@ -85,18 +86,19 @@ As of version 0.0.3, the data stored in the LevelDB nodes is json structured as 
 
 ## TODO
 
+Upcoming releases:
+
 - Release 0.0.4 will probably make streaming keys work, maybe.
 - Release 0.0.5 will finalize the storage format.
 - Release 0.0.6 will contemplate eviction.
 
+General goals:
 
-- The RESTful server is an improving mess. 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
+- The RESTful server needs error handling. 
 - Reconnect on errors.
 - Error handling.
 - Better logging. Configurable, for one thing.
-- Light-cycle is rickety; bullet-proof it.
-- Stretch goal: replication? 
 - Back ends should be pluggable; the API is very small.
-
+- Stretch goal: replication? 
 
