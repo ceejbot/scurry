@@ -13,7 +13,7 @@ var LocalNode = require('../lib/localnode');
 
 function nodeFixture()
 {
-	var opts = { id: 'test-id', dbpath: './test/t3', checkFrequency: 1000 };
+	var opts = { id: 'test-id', dbpath: './test/t3', checkFrequency: 500 };
 	var node = new LocalNode(opts);
 
 	return node;
@@ -31,7 +31,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode();
 			}
-			shouldThrow.should.throw(Error);
+			assert.Throw(shouldThrow);
 		});
 
 		it('throws if no ID passed', function()
@@ -99,7 +99,7 @@ describe('LocalNode', function()
 			var db = node.db;
 
 			assert.ok(db.ttl, 'db has not been wrapped with ttl()');
-			assert.ok(typeof db.ttl === 'function', 'db has not been wrapped with ttl()');
+			assert.isFunction(db.ttl, 'db has not been wrapped with ttl()');
 			db.close(done);
 		});
 	});
@@ -128,7 +128,7 @@ describe('LocalNode', function()
 		{
 			var result = node.set('bucket', '1', 'I am a value.');
 			assert.ok(result.then);
-			assert.equal(typeof result.then, 'function', 'not a promise');
+			assert.isFunction(result.then, 'not a promise');
 
 			result.then(function(reply)
 			{
@@ -137,7 +137,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			}).done();
 		});
 
@@ -156,7 +156,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -174,7 +174,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -199,7 +199,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -233,7 +233,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -242,7 +242,7 @@ describe('LocalNode', function()
 		{
 			fs.readFile('./test/mocks/data.png', function(err, data)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 				node.set('bucket', '4', data, { 'content-type': 'image/png' })
 				.then(function()
 				{
@@ -258,7 +258,7 @@ describe('LocalNode', function()
 				})
 				.fail(function(err)
 				{
-					should.not.exist(err);
+					assert.notOk(err);
 				})
 				.done();
 			});
@@ -285,7 +285,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -300,7 +300,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -325,7 +325,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -341,7 +341,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -351,24 +351,25 @@ describe('LocalNode', function()
 	{
 		it('can set a TTL on a key', function(done)
 		{
+			this.timeout(4000);
 			function checkKey()
 			{
 				node.get('bucket', '4')
 				.then(function(value)
 				{
-					should.not.exist(value);
+					assert.isNull(value);
 					done();
 				}).done();
 			}
 
-			node.set('bucket', '4', 'dead value walking', { ttl: 1 })
+			node.set('bucket', '4', 'dead value walking', { ttl: 100 })
 			.then(function(reply)
 			{
-				setTimeout(checkKey, 1500);
+				setTimeout(checkKey, 1000);
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
@@ -381,7 +382,7 @@ describe('LocalNode', function()
 			var keys = [];
 			var kstream = node.keys('bucket');
 			assert.ok(kstream.on);
-			assert.equal(typeof kstream.on, 'function');
+			assert.isFunction(kstream.on);
 
 			kstream.on('data', function(key)
 			{
@@ -410,7 +411,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				should.not.exist(err);
+				assert.notOk(err);
 			})
 			.done();
 		});
