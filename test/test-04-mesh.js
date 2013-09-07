@@ -1,10 +1,10 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai       = require('chai'),
-	assert     = chai.assert,
-	expect     = chai.expect,
-	should     = chai.should()
+	chai   = require('chai'),
+	assert = chai.assert,
+	expect = chai.expect,
+	should = chai.should()
 	;
 
 var Mesh = require('../lib/mesh');
@@ -87,9 +87,9 @@ describe('Mesh', function()
 			});
 
 			assert.ok(m.restify);
-			assert.equal(typeof m.restify, 'object');
+			assert.isObject(m.restify);
 			assert.ok(m.restify.listen);
-			assert.equal(typeof m.restify.listen, 'function');
+			assert.isFunction(m.restify.listen);
 		});
 
 		it('creates a lightcycle hash ring of the specified size', function()
@@ -102,9 +102,9 @@ describe('Mesh', function()
 			});
 
 			assert.ok(m.restify);
-			assert.equal(typeof m.restify, 'object');
+			assert.isObject(m.restify);
 			assert.ok(m.restify.listen);
-			assert.equal(typeof m.restify.listen, 'function');
+			assert.isFunction(m.restify.listen);
 		});
 
 		it('creates a CRDT document', function()
@@ -117,7 +117,7 @@ describe('Mesh', function()
 			});
 
 			assert.ok(m.meshdata);
-			assert.equal(typeof m.meshdata, 'object');
+			assert.isObject(m.meshdata);
 		});
 	});
 
@@ -132,7 +132,7 @@ describe('Mesh', function()
 	describe('join()', function()
 	{
 		it('adds a local node to the hash ring');
-		it('advertises this node to the scuttlebutt network using the document')
+		it('advertises this node to the scuttlebutt network using the document');
 	});
 
 	describe('locate()', function()
