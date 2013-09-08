@@ -40,12 +40,12 @@ Replace `10.0.0.5` with the IP address of your server.
 Then stuff some data in: 
 
 ```shell
-http -f PUT 10.0.0.5:3334/vodkas/1 name="Sobieski" rating=5
-http -f PUT 10.0.0.5:3335/vodkas/2 name="Tito's Handmade" rating=5
-http -f PUT 10.0.0.5:3335/vodkas/3 name="Bimber" rating=4
+http PUT 10.0.0.5:3334/vodkas/1 name="Sobieski" rating=5
+http PUT 10.0.0.5:3335/vodkas/2 name="Tito's Handmade" rating=5
+http PUT 10.0.0.5:3335/vodkas/3 name="Bimber" rating=4
 ```
 
-Get it back out: `http GET 10.0.0.5:3336/vodkas/2`
+Get it back out: `http GET 10.0.0.5:3336/vodkas/2 | json`
 
 (Human-friendly shell commands courtesy of [httpie](https://github.com/jkbr/httpie)).
 

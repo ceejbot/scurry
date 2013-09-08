@@ -7,7 +7,7 @@ var
 
 function IntegerStream(count)
 {
-	this.max = count || Math.floor(Math.random() * 100);
+	this.max = (count === undefined) ? Math.floor(Math.random() * 100) : count;
 	this.count = 0;
 	stream.Readable.call(this, { objectMode: true});
 
@@ -15,22 +15,31 @@ function IntegerStream(count)
 }
 util.inherits(IntegerStream, stream.Readable);
 
+IntegerStream.prototype.checkDone = function()
+{
+	if (this.count >= this.max)
+	{
+		this.push(null);
+		this.value = null;
+		return true;
+	}
+
+	return false;
+};
+
 IntegerStream.prototype.generate = function()
 {
-	this.push(this.value);
-	this.value = this.value + Math.floor(Math.random() * 50) + 1;
+	if (!this.checkDone())
+	{
+		this.push(this.value);
+		this.count++;
+		if (!this.checkDone())
+			this.value = this.value + Math.floor(Math.random() * 50) + 1;
+	}
 }
 
 IntegerStream.prototype._read = function(size)
 {
-	this.count++;
-	if (this.count > this.max)
-	{
-		this.push(null);
-		this.value = null;
-		return;
-	}
-
 	var r = Math.floor(Math.random() * 50);
 	if (r < 10)
 		this.generate();

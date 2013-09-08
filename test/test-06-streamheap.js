@@ -226,9 +226,6 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			if (values.length > desired * 2)
-				console.log(values);
-
 			assert.equal(values.length, desired * 2);
 			for (var i = 0; i < values.length - 1; i++)
 			{
@@ -274,14 +271,14 @@ describe('muxStreams()', function()
 
 		var values = [];
 
-		var result = muxer.muxStreams(streams);
-		result.on('data', function(v)
+		var outstream = muxer.muxStreams(streams);
+		outstream.on('data', function(v)
 		{
 			values.push(v);
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, desired * 10);
+			assert.equal(values.length, desired * 10, 'expected 1000 items');
 			for (var i = 0; i < values.length - 1; i++)
 			{
 				assert.isTrue(values[i] <= values[i + 1], 'wtf not sorted!');
@@ -289,4 +286,38 @@ describe('muxStreams()', function()
 			done();
 		});
 	});
+
+	it('handles a stream with no data', function(done)
+	{
+		var outstream = muxer.muxStreams([new IntStream(0)]);
+		var values = [];
+
+		outstream.on('data', function(v)
+		{
+			values.push(v);
+		})
+		.on('end', function()
+		{
+			assert.equal(values.length, 0, 'expected 0 items');
+			done();
+		});
+	});
+
+
+	it('handles several streams with 1 item', function(done)
+	{
+		var values = [];
+
+		var outstream = muxer.muxStreams([new IntStream(1), new IntStream(0), new IntStream(3)]);
+		outstream.on('data', function(v)
+		{
+			values.push(v);
+		})
+		.on('end', function()
+		{
+			assert.equal(values.length, 4, 'expected 4 items');
+			done();
+		});
+	});
+
 });

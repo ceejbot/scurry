@@ -1,6 +1,6 @@
 {
 	"name":           "scurry",
-	"version":        "0.0.3",
+	"version":        "0.0.4",
 	"description":    "A leveldb-backed consistent hash ring, for your toy caching needs.",
 	"author":         "C J Silverio <ceejceej@gmail.com>",
 	"license":        "MIT",
@@ -49,6 +49,7 @@
 		"leveldown":      "*",
 		"levelup":        "*",
 		"light-cycle":    "*",
+		"lodash":         "*",
 		"my-local-ip":    "*",
 		"node-uuid":      "*",
 		"optimist":       "*",
