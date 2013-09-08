@@ -14,13 +14,20 @@ var MockMesh = module.exports = function MockMesh(opts)
 	for (var i = 0; i < count; i++)
 	{
 		var node = new MockNode(String(i));
+		if (i === 0) this.mynode = node;
 		this.cycle.add(node, node.id);
 	}
+
 };
 
 MockMesh.prototype.locate = function(bucket, id)
 {
 	return this.cycle.locate(bucket + '/' + id);
+};
+
+MockMesh.prototype.nodes = function()
+{
+	return this.cycle.entries;
 };
 
 function MockNode(id)

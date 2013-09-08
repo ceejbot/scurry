@@ -240,11 +240,11 @@ describe('REST api', function()
 
 	describe('GET /:bucket', function()
 	{
-		it('responds with a key stream', function(done)
+		it('?keys=true responds with a key stream', function(done)
 		{
 			var opts =
 			{
-				path:   '/test',
+				path:   '/test?keys=true',
 				method: 'GET',
 			};
 

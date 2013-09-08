@@ -5,11 +5,12 @@ var
 	util   = require('util')
 	;
 
-function IntegerStream(count)
+function IntegerStream(max)
 {
-	this.max = (count === undefined) ? Math.floor(Math.random() * 100) : count;
+	this.max = (max === undefined) ? Math.floor(Math.random() * 100) : max;
 	this.count = 0;
 	stream.Readable.call(this, { objectMode: true});
+	this.timer = null;
 
 	this.value = Math.floor(Math.random() * 250);
 }
@@ -29,10 +30,13 @@ IntegerStream.prototype.checkDone = function()
 
 IntegerStream.prototype.generate = function()
 {
+	this.timer = null;
 	if (!this.checkDone())
 	{
+		if (this.count === this.max) console.log('WTF', this.count, this.max);
 		this.push(this.value);
 		this.count++;
+		if (this.count > this.max) console.log('WTF', this.count, this.max);
 		if (!this.checkDone())
 			this.value = this.value + Math.floor(Math.random() * 50) + 1;
 	}
@@ -40,11 +44,13 @@ IntegerStream.prototype.generate = function()
 
 IntegerStream.prototype._read = function(size)
 {
+	if (this.timer) return;
+
 	var r = Math.floor(Math.random() * 50);
 	if (r < 10)
 		this.generate();
 	else
-		setTimeout(this.generate.bind(this), r);
+		this.timer = setTimeout(this.generate.bind(this), r);
 };
 
 module.exports = IntegerStream;
