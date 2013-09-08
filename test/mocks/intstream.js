@@ -17,20 +17,20 @@ util.inherits(IntegerStream, stream.Readable);
 
 IntegerStream.prototype.generate = function()
 {
-	if (this.count >= this.max)
+	this.push(this.value);
+	this.value = this.value + Math.floor(Math.random() * 50) + 1;
+}
+
+IntegerStream.prototype._read = function(size)
+{
+	this.count++;
+	if (this.count > this.max)
 	{
 		this.push(null);
 		this.value = null;
 		return;
 	}
 
-	this.push(this.value);
-	this.value = this.value + Math.floor(Math.random() * 50) + 1;
-	this.count++;
-}
-
-IntegerStream.prototype._read = function(size)
-{
 	var r = Math.floor(Math.random() * 50);
 	if (r < 10)
 		this.generate();

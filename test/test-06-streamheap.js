@@ -226,6 +226,9 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
+			if (values.length > desired * 2)
+				console.log(values);
+
 			assert.equal(values.length, desired * 2);
 			for (var i = 0; i < values.length - 1; i++)
 			{
