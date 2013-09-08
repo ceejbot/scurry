@@ -33,10 +33,8 @@ IntegerStream.prototype.generate = function()
 	this.timer = null;
 	if (!this.checkDone())
 	{
-		if (this.count === this.max) console.log('WTF', this.count, this.max);
 		this.push(this.value);
 		this.count++;
-		if (this.count > this.max) console.log('WTF', this.count, this.max);
 		if (!this.checkDone())
 			this.value = this.value + Math.floor(Math.random() * 50) + 1;
 	}
@@ -47,7 +45,7 @@ IntegerStream.prototype._read = function(size)
 	if (this.timer) return;
 
 	var r = Math.floor(Math.random() * 50);
-	if (r < 10)
+	if (true || r < 10)
 		this.generate();
 	else
 		this.timer = setTimeout(this.generate.bind(this), r);
