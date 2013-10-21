@@ -102,3 +102,6 @@ General goals:
 - Back ends should be pluggable; the API is very small.
 - Stretch goal: replication? 
 
+## License
+
+MIT.
