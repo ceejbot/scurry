@@ -25,7 +25,7 @@ var
 
 optimist.check(function(args)
 {
-	return (args.c || (!!args.id && !!args.g && !!args.d))
+	return (args.c || (!!args.id && !!args.g && !!args.d));
 });
 
 var opts;
