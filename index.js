@@ -1,10 +1,10 @@
 // Pull all the pieces in lib together to construct a server
 
 var
-	assert   = require('assert'),
-	Mesh     = require('./lib/mesh'),
-	localip  = require("my-local-ip")(),
-	optimist = require('optimist')
+	assert  = require('assert'),
+	Mesh    = require('./lib/mesh'),
+	localip = require("my-local-ip")(),
+	options = require('yargs')
 		.usage('Run a single node in the mesh.\nIf you pass a config file, none of the other options are considered.\nUsage: $0 --id=node-one -p 3000 -g 4114 --dbpath=./db\n       $0 --config=./node-one.json')
 		.alias('c', 'config')
 		.describe('c', 'path to a json file defining the other config options')
@@ -23,25 +23,25 @@ var
 		.describe('s', 'hostname of the gossip server to connect to')
 	;
 
-optimist.check(function(args)
+options.check(function(args)
 {
 	return (args.c || (!!args.id && !!args.g && !!args.d));
 });
 
 var opts;
 
-if (optimist.argv.config)
-	opts = require(optimist.argv.config);
+if (options.argv.config)
+	opts = require(options.argv.config);
 else
 {
 	opts =
 	{
-		id:      optimist.argv.id,
-		dbpath:  optimist.argv.dbpath,
-		api:     optimist.argv.port,
-		gossip:  optimist.argv.gossip,
-		server:  optimist.argv.server,
-		master:  optimist.argv.master
+		id:      options.argv.id,
+		dbpath:  options.argv.dbpath,
+		api:     options.argv.port,
+		gossip:  options.argv.gossip,
+		server:  options.argv.server,
+		master:  options.argv.master
 	};
 }
 
