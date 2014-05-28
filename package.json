@@ -1,69 +1,66 @@
 {
-	"name":           "scurry",
-	"version":        "0.0.5",
-	"description":    "A leveldb-backed consistent hash ring, for your toy caching needs.",
-	"author":         "C J Silverio <ceejceej@gmail.com>",
-	"license":        "MIT",
-	"readmeFilename": "README.md",
-	"main":           "index.js",
-	"scripts":
-	{
-		"start":      "node index.js --id=server -m -g 4114 -p 3333 --dbpath=./db | ./node_modules/.bin/bunyan -o short",
-		"node1":      "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
-		"node2":      "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
-		"node3":      "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short",
-		"test":       "npm run test-suite && npm run coveralls && npm run test-cov",
-		"test-suite": "./node_modules/.bin/mocha -R spec test/*.js",
-		"test-cov":   "./node_modules/.bin/mocha --require blanket -R travis-cov test/*.js",
-		"coverage":   "./node_modules/.bin/mocha --require blanket -R html-cov test/*.js > test/coverage.html",
-		"coveralls":  "NODE_ENV=test YOURPACKAGE_COVERAGE=1 ./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter test/*.js | ./node_modules/coveralls/bin/coveralls.js",
-		"blanket":
-		{
-			"pattern": "//^((?!\/test|examples|node_modules\/).)*$/ig",
-			"onlyCwd": true
-		},
-		"travis-cov": { "threshold": 30 }
-	},
-	"repository":
-	{
-		"type": "git",
-		"url":  "https://github.com/ceejbot/scurry"
-	},
-	"keywords":
-	[
-		"leveldb",
-		"scuttlebutt",
-		"autosharding"
-	],
-	"gitHead":        "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
-	"bugs":
-	{
-		"url": "https://github.com/ceejbot/scurry/issues"
-	},
-	"dependencies":
-	{
-		"bunyan":         "^0.22.1",
-		"crdt":           "^3.6",
-		"level-sublevel": "^5.2",
-		"level-ttl":      "^0.5",
-		"leveldown":      "^0.10.2",
-		"levelup":        "^0.18.2",
-		"light-cycle":    "^0.1",
-		"lodash":         "^2.4",
-		"my-local-ip":    "*",
-		"node-uuid":      "*",
-		"p-promise":      "*",
-		"restify":        "^2.6.1",
-		"scuttlebutt":    "^5.6.8",
-		"yargs":          "^1.0"
-	},
-	"devDependencies":
-	{
-		"blanket":             "latest",
-		"chai":                "latest",
-		"mocha":               "latest",
-		"travis-cov":          "latest",
-		"mocha-lcov-reporter": "latest",
-		"coveralls":           "latest"
-	}
+  "name": "scurry",
+  "description": "A leveldb-backed consistent hash ring, for your toy caching needs.",
+  "version": "0.0.5",
+  "author": "C J Silverio <ceejceej@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/ceejbot/scurry/issues"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "//^((?!/test|examples|node_modules/).)*$/ig",
+      "onlyCwd": true
+    },
+    "travis-cov": {
+      "threshold": 30
+    }
+  },
+  "dependencies": {
+    "bunyan": "^0.22.1",
+    "crdt": "^3.6",
+    "level-sublevel": "^5.2",
+    "level-ttl": "^0.6.1",
+    "leveldown": "^0.10.2",
+    "levelup": "^0.18.2",
+    "light-cycle": "^0.1",
+    "lodash": "^2.4",
+    "my-local-ip": "*",
+    "node-uuid": "*",
+    "p-promise": "*",
+    "restify": "^2.6.1",
+    "scuttlebutt": "^5.6.8",
+    "yargs": "^1.0"
+  },
+  "devDependencies": {
+    "blanket": "latest",
+    "chai": "latest",
+    "coveralls": "latest",
+    "mocha": "latest",
+    "mocha-lcov-reporter": "latest",
+    "travis-cov": "latest"
+  },
+  "gitHead": "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
+  "keywords": [
+    "leveldb",
+    "scuttlebutt",
+    "autosharding"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ceejbot/scurry"
+  },
+  "scripts": {
+    "start": "node index.js --id=server -m -g 4114 -p 3333 --dbpath=./db | ./node_modules/.bin/bunyan -o short",
+    "node1": "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
+    "node2": "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
+    "node3": "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short",
+    "test": "npm run test-suite && npm run coveralls && npm run test-cov",
+    "test-suite": "./node_modules/.bin/mocha -R spec test/*.js",
+    "test-cov": "./node_modules/.bin/mocha --require blanket -R travis-cov test/*.js",
+    "coverage": "./node_modules/.bin/mocha --require blanket -R html-cov test/*.js > test/coverage.html",
+    "coveralls": "NODE_ENV=test YOURPACKAGE_COVERAGE=1 ./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter test/*.js | ./node_modules/coveralls/bin/coveralls.js"
+  }
 }
