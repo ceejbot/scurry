@@ -1,7 +1,7 @@
 {
   "name": "scurry",
   "description": "A leveldb-backed consistent hash ring, for your toy caching needs.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "C J Silverio <ceejceej@gmail.com>",
   "bugs": {
     "url": "https://github.com/ceejbot/scurry/issues"
