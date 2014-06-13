@@ -53,7 +53,7 @@ Get it back out: `http GET 10.0.0.5:3336/vodkas/2 | json`
 
 API endpoints exposed:
 
-- `GET /:bucket`: stream sorted keys for a bucket (not yet working)
+- `GET /:bucket`: stream sorted keys for a bucket (works!)
 - `POST /:bucket`: add an item to the cache; id is generated for you & returned
 - `PUT /:bucket/:id`: add/update an item in the cache; 204 response
 - `GET /:bucket/:id`: get an item from the cache
@@ -88,9 +88,9 @@ As of version 0.0.4, the data stored in the LevelDB nodes is json structured as 
 
 Upcoming releases:
 
-- Release 0.0.4 will probably make streaming keys work, maybe.
-- Release 0.0.5 will finalize the storage format.
-- Release 0.0.6 will contemplate eviction.
+- Release 0.0.4 will probably make streaming keys work, maybe. Done!
+- Release 0.0.5 will finalize the storage format. Probably done!
+- Release 0.0.6 will contemplate eviction. Not yet!
 
 General goals:
 
