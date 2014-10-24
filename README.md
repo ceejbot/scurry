@@ -3,11 +3,8 @@ scurry
 
 A leveldb-backed consistent hash ring, for your caching needs. I can see the day when you might want to put data in this & feel reasonably sort of confident you might get it back out again. If this scares you, it's supposed to.
 
-[![NPM](https://nodei.co/npm/scurry.png)](https://nodei.co/npm/scurry/)
+[![on npm](http://img.shields.io/npm/v/scurry.svg?style=flat)](https://www.npmjs.org/package/scurry)   [![Tests](http://img.shields.io/travis/ceejbot/scurry.svg?style=flat)](http://travis-ci.org/ceejbot/scurry)  [![Coverage Status](http://img.shields.io/coveralls/ceejbot/scurry.svg?style=flat)](https://coveralls.io/r/ceejbot/scurry)    [![Dependencies](http://img.shields.io/david/ceejbot/scurry.svg?style=flat)](https://david-dm.org/ceejbot/scurry)
 
-[![Build Status](https://secure.travis-ci.org/ceejbot/scurry.png)](http://travis-ci.org/ceejbot/scurry)
-[![Dependencies](https://david-dm.org/ceejbot/scurry.png)](https://david-dm.org/ceejbot/scurry)
-[![Coverage Status](https://coveralls.io/repos/ceejbot/scurry/badge.png)](https://coveralls.io/r/ceejbot/scurry)
 
 ## One part each
 
@@ -37,7 +34,7 @@ Replace `10.0.0.5` with the IP address of your server.
 
 ## Strain into a chilled glass
 
-Then stuff some data in: 
+Then stuff some data in:
 
 ```shell
 http PUT 10.0.0.5:3334/vodkas/1 name="Sobieski" rating=5
@@ -95,12 +92,12 @@ Upcoming releases:
 General goals:
 
 - Implement key streaming from multiple nodes. See notes in endpoints.handleGetBucket().
-- The RESTful server needs error handling. 
+- The RESTful server needs error handling.
 - Reconnect on errors.
 - Error handling.
 - Better logging. Configurable, for one thing.
 - Back ends should be pluggable; the API is very small.
-- Stretch goal: replication? 
+- Stretch goal: replication?
 
 ## License
 
