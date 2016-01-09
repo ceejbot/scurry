@@ -1,11 +1,8 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai   = require('chai'),
-	assert = chai.assert,
-	expect = chai.expect,
-	should = chai.should(),
-	child  = require('child_process'),
+	demand = require('must'),
+	rimraf = require('rimraf'),
 	fs     = require('fs')
 	;
 
@@ -31,7 +28,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode();
 			}
-			assert.Throw(shouldThrow);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('throws if no ID passed', function()
@@ -40,7 +37,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode({ foo: 'bar' });
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('throws if no dbpath passed', function()
@@ -49,7 +46,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode({ id: 'bar' });
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('can construct a node when passed the required options', function(done)
@@ -62,21 +59,21 @@ describe('LocalNode', function()
 			};
 
 			var node = new LocalNode(opts);
-			assert.equal(node.id, opts.id);
-			assert.equal(node.logger, opts.logger);
-			assert.ok(node.db);
+			node.id.must.equal(opts.id);
+			node.logger.must.equal(opts.logger);
+			node.db.must.exist();
 			node.db.close(done);
 		});
 
 		it('creates the dbpath if needed', function(done)
 		{
-			assert.ok(!fs.existsSync('./test/t2'), 'test db path exists already!');
+			fs.existsSync('./test/t2').must.be.false();
 			var opts = { id: 'test-id', dbpath: './test/t2' };
 			var node = new LocalNode(opts);
 
 			node.db.on('ready', function()
 			{
-				assert.ok(fs.existsSync('./test/t2'), 'test db path was not created');
+				fs.existsSync('./test/t2').must.be.true();
 				node.db.close(done);
 			});
 		});
@@ -87,8 +84,8 @@ describe('LocalNode', function()
 			var node = new LocalNode(opts);
 			var db = node.db;
 
-			assert.ok(db.sublevel, 'db has not been sublevel-ified');
-			assert.ok(typeof db.sublevel === 'function', 'db has not been sublevel-ified');
+			db.sublevel, 'db has not been sublevel-ified'.must.exist();
+			db.sublevel.must.be.a.function();
 			db.close(done);
 		});
 
@@ -98,8 +95,8 @@ describe('LocalNode', function()
 			var node = new LocalNode(opts);
 			var db = node.db;
 
-			assert.ok(db.ttl, 'db has not been wrapped with ttl()');
-			assert.isFunction(db.ttl, 'db has not been wrapped with ttl()');
+			db.must.have.property('ttl');
+			db.ttl.must.be.a.function();
 			db.close(done);
 		});
 	});
@@ -112,7 +109,7 @@ describe('LocalNode', function()
 			{
 				node.set();
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('requires that you pass a string id', function()
@@ -121,23 +118,23 @@ describe('LocalNode', function()
 			{
 				node.set('bucket');
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('returns a promise', function(done)
 		{
 			var result = node.set('bucket', '1', 'I am a value.');
-			assert.ok(result.then);
-			assert.isFunction(result.then, 'not a promise');
+			result.must.have.property('then');
+			result.then.must.be.a.function();
 
 			result.then(function(reply)
 			{
-				assert.equal(reply, 'OK');
+				reply.must.equal('OK');
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			}).done();
 		});
 
@@ -146,17 +143,17 @@ describe('LocalNode', function()
 			node.get('bucket', '1')
 			.then(function(result)
 			{
-				assert.ok(result, 'did not find a value!');
-				assert.equal(typeof result, 'object', 'did not store an object');
-				assert.ok(result.ts, 'no timestamp');
-				assert.equal(typeof result.ts, 'number');
-				assert.ok(result.etag, 'no etag hash');
-				assert.ok(result.payload, 'no payload holding the value');
+				result.must.exist();
+				result.must.be.an.object();
+				result.must.have.property('ts');
+				result.ts.must.be.a.number();
+				result.must.have.property('etag');
+				result.must.have.property('payload');
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -166,15 +163,17 @@ describe('LocalNode', function()
 			node.get('bucket', '1')
 			.then(function(result)
 			{
-				assert.ok(result.payload, 'no payload holding the value');
-				assert.equal(typeof result.payload, 'string');
-				assert.equal(result.payload, 'I am a value.');
+				result.must.be.an.object();
+				result.must.have.property('payload');
+				result.payload.must.be.a.string();
+				result.payload.must.be.a.string();
+				result.payload.must.equal('I am a value.');
 
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -191,15 +190,15 @@ describe('LocalNode', function()
 			})
 			.then(function(result)
 			{
-				assert.ok(result.payload, 'no payload holding the value');
-				assert.ok(Buffer.isBuffer(result.payload));
-				assert.equal(result.payload.length, 8);
-				assert.equal(result.payload[0], 1);
+				result.payload, 'no payload holding the value'.must.exist();
+				Buffer.isBuffer(result.payload).must.be.true();
+				result.payload.length.must.equal(8);
+				result.payload[0].must.equal(1);
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -221,19 +220,18 @@ describe('LocalNode', function()
 			.then(function(result)
 			{
 				var stored = result.payload;
-				assert.ok(stored, 'no payload holding the value');
-				assert.equal(typeof stored, 'object', 'did not get an object back');
-				assert.ok(stored.foo);
-				assert.equal(stored.foo, 'foo');
-				assert.ok(stored.bar);
-				assert.equal(stored.bar, 'bar');
-				assert.ok(stored.baz);
-				assert.ok(Array.isArray(stored.baz), 'array subitem not stored correctly');
+				stored.must.be.an.object();
+				stored.foo.must.exist();
+				stored.foo.must.equal('foo');
+				stored.bar.must.exist();
+				stored.bar.must.equal('bar');
+				stored.baz.must.exist();
+				stored.baz.must.be.an.array();
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -242,7 +240,7 @@ describe('LocalNode', function()
 		{
 			fs.readFile('./test/mocks/data.png', function(err, data)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 				node.set('bucket', '4', data, { 'content-type': 'image/png' })
 				.then(function()
 				{
@@ -250,15 +248,14 @@ describe('LocalNode', function()
 				})
 				.then(function(result)
 				{
-					var stored = result.payload;
-					assert.ok(stored, 'no payload holding the value');
-					assert.ok(Buffer.isBuffer(stored), 'did not get a buffer back');
-					assert.equal(result['content-type'], 'image/png', 'content type was not stored');
+					result.must.have.property('payload');
+					Buffer.isBuffer(result.payload).must.be.true();
+					result['content-type'].must.equal('image/png', 'content type was not stored');
 					done();
 				})
 				.fail(function(err)
 				{
-					assert.notOk(err);
+					demand(err).not.exist();
 				})
 				.done();
 			});
@@ -271,8 +268,8 @@ describe('LocalNode', function()
 		it('returns a promise', function()
 		{
 			var result = node.get('bucket', '1');
-			assert.ok(result.then);
-			assert.equal(typeof result.then, 'function', 'not a promise');
+			result.must.have.property('then');
+			result.then.must.be.a.function();
 		});
 
 		it('can fetch a previously-stored value', function(done)
@@ -280,12 +277,12 @@ describe('LocalNode', function()
 			node.get('bucket', '1')
 			.then(function(result)
 			{
-				assert.ok(result, 'did not find a value!');
+				result.must.exist();
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -295,12 +292,12 @@ describe('LocalNode', function()
 			node.get('bucket', '12')
 			.then(function(result)
 			{
-				assert.equal(result, null, 'expected null for non-existent keys!');
+				demand(result).be.null();
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -311,8 +308,8 @@ describe('LocalNode', function()
 		it('returns a promise', function()
 		{
 			var result = node.del('bucket', '1');
-			assert.ok(result.then);
-			assert.equal(typeof result.then, 'function', 'not a promise');
+			result.must.have.property('then');
+			result.then.must.be.a.function();
 		});
 
 		it('removes an item from storage', function(done)
@@ -320,12 +317,12 @@ describe('LocalNode', function()
 			node.get('bucket', '1')
 			.then(function(result)
 			{
-				assert.equal(result, null, 'expected null for a deleted key');
+				demand(result).be.null();
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -335,13 +332,13 @@ describe('LocalNode', function()
 			node.del('bucket', '1')
 			.then(function(reply)
 			{
-				assert.ok(reply);
-				assert.equal(reply, 'OK');
+				reply.must.exist();
+				reply.must.equal('OK');
 				done();
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -357,7 +354,7 @@ describe('LocalNode', function()
 				node.get('bucket', '4')
 				.then(function(value)
 				{
-					assert.isNull(value);
+					demand(value).be.null();
 					done();
 				}).done();
 			}
@@ -369,7 +366,7 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
@@ -381,8 +378,8 @@ describe('LocalNode', function()
 		{
 			var keys = [];
 			var kstream = node.keys('bucket');
-			assert.ok(kstream.on);
-			assert.isFunction(kstream.on);
+			kstream.must.have.property('on');
+			kstream.on.must.be.a.function();
 
 			kstream.on('data', function(key)
 			{
@@ -391,9 +388,9 @@ describe('LocalNode', function()
 
 			kstream.on('end', function()
 			{
-				assert.equal(keys.length, 2);
-				assert.equal(keys[0], '2');
-				assert.equal(keys[1], '3');
+				keys.length.must.equal(2);
+				keys[0].must.equal('2');
+				keys[1].must.equal('3');
 				done();
 			});
 		});
@@ -411,16 +408,20 @@ describe('LocalNode', function()
 			})
 			.fail(function(err)
 			{
-				assert.notOk(err);
+				demand(err).not.exist();
 			})
 			.done();
 		});
 	});
 
-	after(function()
+	after(function(done)
 	{
-		child.exec('rm -rf ./test/t1');
-		child.exec('rm -rf ./test/t2');
-		child.exec('rm -rf ./test/t3');
+		rimraf('./test/t1', function(err)
+		{
+			rimraf('./test/t2', function(err)
+			{
+				rimraf('./test/t3', done);
+			});
+		});
 	});
 });

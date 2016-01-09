@@ -1,16 +1,11 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai   = require('chai'),
-	assert = chai.assert,
-	expect = chai.expect,
-	should = chai.should()
-	;
+	demand = require('must'),
+	Mesh = require('../lib/mesh'),
+	LightCycle = require('light-cycle');
 
-var Mesh = require('../lib/mesh');
-
-var testOptions =
-{
+var testOptions = {
 	id:     'testmesh',
 	gossip: 4114,
 	api:    3000
@@ -27,9 +22,9 @@ describe('Mesh', function()
 			function shouldThrow()
 			{
 				var m = new Mesh();
-				assert.ok(m);
+				m.must.exist();
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('demands a `gossip` port option', function()
@@ -37,9 +32,9 @@ describe('Mesh', function()
 			function shouldThrow()
 			{
 				var m = new Mesh({ foo: 'bar' });
-				assert.ok(m);
+				m.must.exist();
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('demands an `api` port option', function()
@@ -47,9 +42,9 @@ describe('Mesh', function()
 			function shouldThrow()
 			{
 				var m = new Mesh({ gossip: 4114 });
-				assert.ok(m);
+				m.must.exist();
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('constructs a mesh when all required data is provided', function()
@@ -61,8 +56,8 @@ describe('Mesh', function()
 				api:    3000
 			});
 
-			assert.ok(m);
-			assert.equal(m.id, 'testmesh');
+			m.must.exist();
+			m.id.must.equal('testmesh');
 		});
 
 		it('generates a unique ID if one is not provided', function()
@@ -73,8 +68,8 @@ describe('Mesh', function()
 				api:    3000
 			});
 
-			assert.ok(m.id);
-			assert.equal(typeof m.id, 'string');
+			m.must.have.property('id');
+			m.id.must.be.a.string();
 		});
 
 		it('creates a restify server using lib/endpoints', function()
@@ -86,10 +81,10 @@ describe('Mesh', function()
 				api:    3000
 			});
 
-			assert.ok(m.restify);
-			assert.isObject(m.restify);
-			assert.ok(m.restify.listen);
-			assert.isFunction(m.restify.listen);
+			m.must.have.property('restify');
+			m.restify.must.be.an.object();
+			m.restify.must.have.property('listen');
+			m.restify.listen.must.be.a.function();
 		});
 
 		it('creates a lightcycle hash ring of the specified size', function()
@@ -101,10 +96,8 @@ describe('Mesh', function()
 				api:    3000
 			});
 
-			assert.ok(m.restify);
-			assert.isObject(m.restify);
-			assert.ok(m.restify.listen);
-			assert.isFunction(m.restify.listen);
+			m.must.have.property('cycle');
+			m.cycle.must.be.instanceof(LightCycle);
 		});
 
 		it('creates a CRDT document', function()
@@ -116,8 +109,8 @@ describe('Mesh', function()
 				api:    3000
 			});
 
-			assert.ok(m.meshdata);
-			assert.isObject(m.meshdata);
+			m.must.have.property('meshdata');
+			m.meshdata.must.be.an.object();
 		});
 	});
 
@@ -144,7 +137,7 @@ describe('Mesh', function()
 				testmesh.locate();
 			}
 
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('creates a hash ring key by joining the arguments with /');

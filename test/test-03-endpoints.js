@@ -1,13 +1,7 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai       = require('chai'),
-	assert     = chai.assert,
-	// expect     = chai.expect,
-	should     = chai.should()
-	;
-
-var
+	demand = require('must'),
 	endpoints = require('../lib/endpoints'),
 	MockMesh  = require('./mocks/mesh'),
 	http      = require('http')
@@ -65,25 +59,25 @@ describe('REST api', function()
 			function shouldThrow()
 			{
 				var m = endpoints.createServer();
-				assert.ok(m);
+				m.must.exist();
 			}
-			shouldThrow.should.throw(Error);
+			shouldThrow.must.throw(Error);
 		});
 
 		it('createServer() returns a configured restify server', function()
 		{
 			var s = endpoints.createServer({ mesh: mesh });
-			assert.equal(s.name, 'restify');
-			assert.ok(s.routes);
-			assert.ok(s.chain);
+			s.name.must.equal('restify');
+			s.routes.must.exist();
+			s.chain.must.exist();
 		});
 
 		it('has custom middleware for scurry', function()
 		{
 			var s = endpoints.createServer({ mesh: mesh });
 			var middleware = s.chain;
-			assert.equal(middleware[0].name, 'domainWrapper');
-			assert.equal(middleware[5].name, 'extractTTLHeader');
+			middleware[0].name.must.equal('domainWrapper');
+			middleware[5].name.must.equal('extractTTLHeader');
 		});
 
 		it('listens on the given port', function(done)
@@ -98,9 +92,9 @@ describe('REST api', function()
 			};
 			requestFromTestServer(opts, null, true, function(err, response, body)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 200);
-				assert.equal(body, 'pong');
+				demand(err).must.not.exist();
+				response.statusCode.must.equal(200);
+				body.must.equal('pong');
 				done();
 			});
 		});
@@ -121,10 +115,10 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, JSON.stringify(obj1), true, function(err, response, body)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 201);
-				assert.ok(body);
-				assert.equal(typeof body, 'string');
+				demand(err).not.exist();
+				response.statusCode.must.equal(201);
+				body.must.exist();
+				body.must.be.a.string();
 				id1 = body;
 				done();
 			});
@@ -145,21 +139,21 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, JSON.stringify(obj1), false, function(err, response)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 204);
+				demand(err).not.exist();
+				response.statusCode.must.equal(204);
 
 				var node = mesh.locate('test', '1');
-				assert.ok(node, 'mock mesh failure, no node');
+				node, 'mock mesh failure, no node'.must.exist();
 				node.get('test', '1')
 				.then(function(v)
 				{
-					assert.ok(v);
+					v.must.exist();
 					done();
 				})
 				.fail(function(err)
 				{
 					console.log(err);
-					should.not.exist(err);
+					demand(err).not.exist();
 				}).done();
 			});
 		});
@@ -180,12 +174,12 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, null, true, function(err, response, body)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 200);
-				assert.ok(body);
+				demand(err).not.exist();
+				response.statusCode.must.equal(200);
+				body.must.exist();
 				var headers = response.headers;
-				assert.ok(headers.etag);
-				assert.equal(typeof headers.etag, 'string');
+				headers.etag.must.exist();
+				headers.etag.must.be.a.string();
 
 				previousEtag = headers.etag;
 				done();
@@ -203,9 +197,9 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, null, true, function(err, response)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 200);
-				assert.equal(response.headers.etag, previousEtag);
+				demand(err).not.exist();
+				response.statusCode.must.equal(200);
+				response.headers.etag.must.equal(previousEtag);
 				done();
 			});
 		});
@@ -227,12 +221,12 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, null, false, function(err, response)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 200);
+				demand(err).not.exist();
+				response.statusCode.must.equal(200);
 				var headers = response.headers;
-				assert.ok(headers.etag);
-				assert.ok(headers['last-modified']);
-				assert.ok(headers['content-type']);
+				headers.etag.must.exist();
+				headers['last-modified'].must.exist();
+				headers['content-type'].must.exist();
 				done();
 			});
 		});
@@ -250,8 +244,8 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, null, false, function(err, response)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 200);
+				demand(err).not.exist();
+				response.statusCode.must.equal(200);
 				var count = 0;
 
 				response.on('data', function(chunk)
@@ -262,7 +256,7 @@ describe('REST api', function()
 
 				response.on('end', function()
 				{
-					// assert.equal(count, 2);
+					// count.must.equal(2);
 					done();
 				});
 			});
@@ -288,21 +282,20 @@ describe('REST api', function()
 
 			requestFromTestServer(opts, null, false, function(err, response)
 			{
-				should.not.exist(err);
-				assert.equal(response.statusCode, 204);
+				demand(err).not.exist();
+				response.statusCode.must.equal(204);
 
 				var node = mesh.locate('test', '1');
-				assert.ok(node, 'mock mesh failure, no node');
+				node, 'mock mesh failure, no node'.must.exist();
 				node.get('test', '1')
 				.then(function(v)
 				{
-					should.not.exist(v);
+					demand(v).not.exist();
 					done();
 				})
 				.fail(function(err)
 				{
-					console.log(err);
-					should.not.exist(err);
+					demand(err).not.exist();
 				}).done();
 			});
 		});

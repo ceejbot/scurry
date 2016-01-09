@@ -1,10 +1,7 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai      = require('chai'),
-	assert    = chai.assert,
-	expect    = chai.expect,
-	should    = chai.should(),
+	demand = require('must'),
 	muxer     = require('../lib/keymuxer'),
 	Heap      = muxer.BinaryHeap,
 	IntStream = require('./mocks/intstream')
@@ -22,15 +19,15 @@ function hasHeapProperty(m)
 		var parent = i >> 1;
 
 		if (parent > 0)
-			assert.isTrue(heap[parent].value <= current.value, 'doh value less than parent');
+			heap[parent].value.must.be.lte(current.value);
 
 		if (left <= m.heap.size)
-			assert.isTrue(current.value < heap[left].value, 'doh value greater than left child');
+			current.value.must.be.below(heap[left].value);
 
 		if (right <= m.heap.size)
 		{
-			assert.isTrue(current.value <= heap[right].value, 'doh value greater than right child');
-			assert.isTrue(heap[left].value <= heap[right].value, 'doh right > left');
+			current.value.must.be.lte(heap[right].value);
+			heap[left].value.must.be.lte(heap[right].value);
 		}
 	}
 
@@ -53,10 +50,10 @@ describe('min BinaryHeap', function()
 	it('can be constructed', function()
 	{
 		var m = new Heap();
-		assert.isArray(m.heap);
-		assert.equal(m.size, 0);
-		assert.equal(m.heap.length, 1);
-		assert.equal(m.heap[0], null);
+		m.heap.must.be.an.array();
+		m.size.must.equal(0);
+		m.heap.length.must.equal(1);
+		demand(m.heap[0]).be.null();
 	});
 
 	it('insert() adds a node', function()
@@ -65,10 +62,10 @@ describe('min BinaryHeap', function()
 		var m = new Heap();
 		m.insert(item);
 
-		assert.equal(m.size, 1);
-		assert.equal(m.heap.length, 2);
-		assert.isObject(m.heap[1]);
-		assert.equal(m.heap[1].id, item.id);
+		m.size.must.equal(1);
+		m.heap.length.must.equal(2);
+		m.heap[1].must.be.an.object();
+		m.heap[1].id.must.equal(item.id);
 	});
 
 	it('insert() keeps the heap sorted', function()
@@ -77,11 +74,11 @@ describe('min BinaryHeap', function()
 		m.insert({ id: 'max', value: 42});
 		m.insert({ id: 'min', value: 2});
 
-		assert.equal(m.size, 2);
-		assert.equal(m.heap.length, 3);
-		assert.isObject(m.heap[1]);
-		assert.equal(m.heap[1].id, 'min');
-		assert.equal(m.heap[2].id, 'max');
+		m.size.must.equal(2);
+		m.heap.length.must.equal(3);
+		m.heap[1].must.be.an.object();
+		m.heap[1].id.must.equal('min');
+		m.heap[2].id.must.equal('max');
 	});
 
 	it('hasHeapProperty() is a valid test', function()
@@ -94,7 +91,7 @@ describe('min BinaryHeap', function()
 			return hasHeapProperty(m);
 		}
 
-		assert.throws(badheap);
+		badheap.must.throw();
 	});
 
 	it('insert() keeps it sorted through a handful of inserts', function()
@@ -105,13 +102,13 @@ describe('min BinaryHeap', function()
 			m.insert(testItems[i]);
 		}
 
-		assert.equal(m.size, testItems.length);
-		assert.equal(m.heap.length, testItems.length + 1);
-		assert.isObject(m.heap[1]);
-		assert.equal(m.heap[1].value, testmin);
-		assert.isObject(m.heap[m.size]);
+		m.size.must.equal(testItems.length);
+		m.heap.length.must.equal(testItems.length + 1);
+		m.heap[1].must.be.an.object();
+		m.heap[1].value.must.equal(testmin);
+		m.heap[m.size].must.be.an.object();
 
-		assert.isTrue(hasHeapProperty(m));
+		hasHeapProperty(m).must.be.true();
 	});
 
 	it('minHeapify() keeps the heap ordered after a value update', function()
@@ -127,10 +124,10 @@ describe('min BinaryHeap', function()
 		{
 			return hasHeapProperty(m);
 		}
-		assert.throws(badheap);
+		badheap.must.throw();
 		m.minHeapify(1);
-		assert.isTrue(hasHeapProperty(m));
-		assert.equal(m.size, testItems.length);
+		hasHeapProperty(m).must.be.true();
+		m.size.must.equal(testItems.length);
 	});
 
 	it('bubble(i) removes the node at i & rebalances', function()
@@ -140,8 +137,8 @@ describe('min BinaryHeap', function()
 			m.insert(testItems[i]);
 
 		m.bubble(3);
-		assert.equal(m.size, testItems.length - 1);
-		assert.isTrue(hasHeapProperty(m));
+		m.size.must.equal(testItems.length - 1);
+		hasHeapProperty(m).must.be.true();
 	});
 
 	it('removeHead() removes the head node', function()
@@ -151,9 +148,9 @@ describe('min BinaryHeap', function()
 			m.insert(testItems[i]);
 
 		var head = m.removeHead();
-		assert.equal(m.size, testItems.length - 1, 'item was not removed');
-		assert.isTrue(hasHeapProperty(m), 'result is not heap-shaped!');
-		assert.ok(head.value <= m.heap[1].value, 'the new head is smaller than the one we popped off!');
+		m.size.must.equal(testItems.length - 1);
+		hasHeapProperty(m).must.be.true();
+		head.value.must.be.lte(m.heap[1].value);
 	});
 
 	it('bubble() can be called on the last node', function()
@@ -163,8 +160,8 @@ describe('min BinaryHeap', function()
 			m.insert(testItems[i]);
 
 		m.bubble(testItems.length);
-		assert.equal(m.size, testItems.length - 1);
-		assert.isTrue(hasHeapProperty(m));
+		m.size.must.equal(testItems.length - 1);
+		hasHeapProperty(m).must.be.true();
 	});
 });
 
@@ -182,13 +179,13 @@ describe('muxStreams()', function()
 	it('takes an array of readable streams', function()
 	{
 		function bad() { return muxer.muxStreams(); }
-		assert.throws(bad);
+		bad.must.throw();
 	});
 
 	it('returns a MuxedStream', function()
 	{
 		var result = muxer.muxStreams([]);
-		assert.ok(result instanceof muxer.MuxedStream);
+		result.must.be.instanceOf(muxer.MuxedStream);
 	});
 
 	it('reads values until all streams are done, one stream variation', function(done)
@@ -204,10 +201,10 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, desired);
+			values.length.must.equal(desired);
 			for (var i = 0; i < values.length - 1; i++)
 			{
-				assert.isTrue(values[i] <= values[i + 1], 'wtf not sorted! ' + values[i] + ' ' + values[i + 1] );
+				values[i].must.be.lte(values[i + 1]);
 			}
 			done();
 		});
@@ -226,10 +223,10 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, desired * 2);
+			values.length.must.equal(desired * 2);
 			for (var i = 0; i < values.length - 1; i++)
 			{
-				assert.isTrue(values[i] <= values[i + 1], 'wtf not sorted!');
+				values[i].must.be.lte(values[i + 1]);
 			}
 			done();
 		});
@@ -252,10 +249,10 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, desired * 3);
+			values.length.must.equal(desired * 3);
 			for (var i = 0; i < values.length - 1; i++)
 			{
-				assert.isTrue(values[i] <= values[i + 1], 'wtf not sorted!');
+				values[i].must.be.lte(values[i + 1]);
 			}
 			done();
 		});
@@ -278,10 +275,10 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, desired * 10, 'expected 1000 items');
+			values.length.must.equal(desired * 10, 'expected 1000 items');
 			for (var i = 0; i < values.length - 1; i++)
 			{
-				assert.isTrue(values[i] <= values[i + 1], 'wtf not sorted!');
+				values[i].must.be.lte(values[i + 1]);
 			}
 			done();
 		});
@@ -298,7 +295,7 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, 0, 'expected 0 items');
+			values.length.must.equal(0);
 			done();
 		});
 	});
@@ -315,9 +312,8 @@ describe('muxStreams()', function()
 		})
 		.on('end', function()
 		{
-			assert.equal(values.length, 4, 'expected 4 items');
+			values.length.must.equal(4);
 			done();
 		});
 	});
-
 });

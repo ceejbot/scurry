@@ -1,54 +1,49 @@
 /*global describe:true, it:true, before:true, after:true */
 
 var
-	chai   = require('chai'),
-	assert = chai.assert,
-	expect = chai.expect,
-	should = chai.should()
-	;
-
-var RemoteNode = require('../lib/remotenode');
+	demand = require('must'),
+	RemoteNode = require('../lib/remotenode');
 
 describe('RemoteNode', function()
 {
 	it('constructor throws if no options passed', function()
 	{
-		function shouldThrow()
+		function mustThrow()
 		{
 			var node = new RemoteNode();
 		}
 
-		shouldThrow.should.throw(Error);
+		mustThrow.must.throw(Error);
 	});
 
 	it('constructor throws if no ID passed', function()
 	{
-		function shouldThrow()
+		function mustThrow()
 		{
 			var node = new RemoteNode({ foo: 'bar' });
 		}
 
-		shouldThrow.should.throw(Error);
+		mustThrow.must.throw(Error);
 	});
 
 	it('constructor throws if no host passed', function()
 	{
-		function shouldThrow()
+		function mustThrow()
 		{
 			var node = new RemoteNode({ id: 'bar' });
 		}
 
-		shouldThrow.should.throw(Error);
+		mustThrow.must.throw(Error);
 	});
 
 	it('constructor throws if no port passed', function()
 	{
-		function shouldThrow()
+		function mustThrow()
 		{
 			var node = new RemoteNode({ id: 'bar', host: 'localhost' });
 		}
 
-		shouldThrow.should.throw(Error);
+		mustThrow.must.throw(Error);
 	});
 
 	it('can be constructed', function()
@@ -61,9 +56,9 @@ describe('RemoteNode', function()
 		};
 		var node = new RemoteNode(opts);
 
-		assert.equal(node.id, opts.id);
-		assert.equal(node.host, opts.host);
-		assert.equal(node.port, opts.port);
+		node.id.must.equal(opts.id);
+		node.host.must.equal(opts.host);
+		node.port.must.equal(opts.port);
 	});
 
 	it('defines an endpoint', function()
@@ -76,8 +71,7 @@ describe('RemoteNode', function()
 		};
 		var node = new RemoteNode(opts);
 
-		assert.ok(node.endpoint);
-		assert.equal(typeof node.endpoint, 'string');
+		node.endpoint.must.exist();
+		node.endpoint.must.be.a.string();
 	});
-
 });
