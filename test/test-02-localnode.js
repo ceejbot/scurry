@@ -28,7 +28,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode();
 			}
-			shouldThrow.must.throw(Error);
+			shouldThrow.must.throw(/options/);
 		});
 
 		it('throws if no ID passed', function()
@@ -37,7 +37,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode({ foo: 'bar' });
 			}
-			shouldThrow.must.throw(Error);
+			shouldThrow.must.throw(/ID/);
 		});
 
 		it('throws if no dbpath passed', function()
@@ -46,7 +46,7 @@ describe('LocalNode', function()
 			{
 				var node = new LocalNode({ id: 'bar' });
 			}
-			shouldThrow.must.throw(Error);
+			shouldThrow.must.throw(/dbpath/);
 		});
 
 		it('can construct a node when passed the required options', function(done)
@@ -71,11 +71,8 @@ describe('LocalNode', function()
 			var opts = { id: 'test-id', dbpath: './test/t2' };
 			var node = new LocalNode(opts);
 
-			node.db.on('ready', function()
-			{
 				fs.existsSync('./test/t2').must.be.true();
 				node.db.close(done);
-			});
 		});
 
 		it('wraps the db with level-sublevel', function(done)
