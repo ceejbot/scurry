@@ -20,3 +20,4 @@ db3
 .DS_Store
 
 coverage.html
+.nyc_output
