@@ -10,7 +10,7 @@ var LocalNode = require('../lib/localnode');
 
 function nodeFixture()
 {
-	var opts = { id: 'test-id', dbpath: './test/t3', checkFrequency: 500 };
+	var opts = { id: 'test-id', dbpath: './test/t3', checkFrequency: 1000 };
 	var node = new LocalNode(opts);
 
 	return node;
@@ -356,10 +356,10 @@ describe('LocalNode', function()
 				}).done();
 			}
 
-			node.set('bucket', '4', 'dead value walking', { ttl: 100 })
+			node.set('bucket', '4', 'dead value walking', { ttl: 500 })
 			.then(function(reply)
 			{
-				setTimeout(checkKey, 1000);
+				setTimeout(checkKey, 2000);
 			})
 			.fail(function(err)
 			{
