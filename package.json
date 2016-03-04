@@ -6,11 +6,6 @@
   "bugs": {
     "url": "https://github.com/ceejbot/scurry/issues"
   },
-  "config": {
-    "travis-cov": {
-      "threshold": 30
-    }
-  },
   "dependencies": {
     "bunyan": "~1.5.1",
     "crdt": "~3.6",
@@ -25,17 +20,15 @@
     "p-promise": "~0.5.0",
     "restify": "~4.0.3",
     "scuttlebutt": "~5.6.8",
-    "yargs": "~3.31.0"
+    "yargs": "~4.2.0"
   },
   "devDependencies": {
-    "coveralls": "~2.11.6",
-    "eslint": "~1.10.3",
-    "mocha": "~2.3.4",
-    "mocha-lcov-reporter": "~1.0.0",
+    "coveralls": "*",
+    "eslint": "2.*",
+    "mocha": "2.*",
     "must": "~0.13.1",
-    "nyc": "~5.3.0",
-    "rimraf": "~2.5.0",
-    "travis-cov": "~0.2.5"
+    "nyc": "5.*",
+    "rimraf": "~2.5.2"
   },
   "gitHead": "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
   "keywords": [
@@ -57,8 +50,7 @@
     "node3": "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short",
     "test": "nyc mocha -R spec",
     "lint": "eslint index.js lib test",
-    "travis": "npm run lint && npm test",
-    "coverage": "./node_modules/.bin/mocha --require blanket -R html-cov test/*.js > test/coverage.html",
-    "coveralls": "NODE_ENV=test YOURPACKAGE_COVERAGE=1 ./node_modules/.bin/mocha --require blanket --reporter mocha-lcov-reporter test/*.js | ./node_modules/coveralls/bin/coveralls.js"
+    "travis": "npm test && npm run coverage",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   }
 }
