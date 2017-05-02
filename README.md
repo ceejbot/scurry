@@ -1,6 +1,8 @@
 scurry
 ======
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/ceejbot/scurry.svg)](https://greenkeeper.io/)
+
 A leveldb-backed consistent hash ring, for your caching needs. I can see the day when you might want to put data in this & feel reasonably sort of confident you might get it back out again. If this scares you, it's supposed to.
 
 [![on npm](http://img.shields.io/npm/v/scurry.svg?style=flat)](https://www.npmjs.org/package/scurry)   [![Tests](http://img.shields.io/travis/ceejbot/scurry.svg?style=flat)](http://travis-ci.org/ceejbot/scurry)  [![Coverage Status](http://img.shields.io/coveralls/ceejbot/scurry.svg?style=flat)](https://coveralls.io/r/ceejbot/scurry)    [![Dependencies](http://img.shields.io/david/ceejbot/scurry.svg?style=flat)](https://david-dm.org/ceejbot/scurry)
