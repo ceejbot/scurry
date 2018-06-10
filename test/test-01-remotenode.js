@@ -4,49 +4,49 @@ var
 	demand = require('must'),
 	RemoteNode = require('../lib/remotenode');
 
-describe('RemoteNode', function()
+describe('RemoteNode', () =>
 {
-	it('constructor throws if no options passed', function()
+	it('constructor throws if no options passed', () =>
 	{
 		function mustThrow()
 		{
-			var node = new RemoteNode();
+			new RemoteNode();
 		}
 
 		mustThrow.must.throw(Error);
 	});
 
-	it('constructor throws if no ID passed', function()
+	it('constructor throws if no ID passed', () =>
 	{
 		function mustThrow()
 		{
-			var node = new RemoteNode({ foo: 'bar' });
+			new RemoteNode({ foo: 'bar' });
 		}
 
 		mustThrow.must.throw(Error);
 	});
 
-	it('constructor throws if no host passed', function()
+	it('constructor throws if no host passed', () =>
 	{
 		function mustThrow()
 		{
-			var node = new RemoteNode({ id: 'bar' });
+			new RemoteNode({ id: 'bar' });
 		}
 
 		mustThrow.must.throw(Error);
 	});
 
-	it('constructor throws if no port passed', function()
+	it('constructor throws if no port passed', () =>
 	{
 		function mustThrow()
 		{
-			var node = new RemoteNode({ id: 'bar', host: 'localhost' });
+			new RemoteNode({ id: 'bar', host: 'localhost' });
 		}
 
 		mustThrow.must.throw(Error);
 	});
 
-	it('can be constructed', function()
+	it('can be constructed', () =>
 	{
 		var opts =
 		{
@@ -61,7 +61,7 @@ describe('RemoteNode', function()
 		node.port.must.equal(opts.port);
 	});
 
-	it('defines an endpoint', function()
+	it('defines an endpoint', () =>
 	{
 		var opts =
 		{

@@ -7,50 +7,63 @@
     "url": "https://github.com/ceejbot/scurry/issues"
   },
   "dependencies": {
-    "bunyan": "~1.5.1",
+    "bistre": "~1.0.1",
+    "bole": "~3.0.2",
     "crdt": "~3.6",
-    "level-sublevel": "~6.5.2",
+    "level-sublevel": "~6.6.2",
     "level-ttl": "~3.1.0",
-    "leveldown": "~1.4.3",
-    "levelup": "~1.3.1",
-    "light-cycle": "~1.3.2",
-    "lodash": "~3.10.1",
+    "leveldown": "~4.0.1",
+    "levelup": "~3.0.1",
+    "light-cycle": "~1.4.3",
+    "lodash": "~4.17.10",
     "my-local-ip": "*",
-    "node-uuid": "*",
     "p-promise": "~0.5.0",
-    "restify": "~5.0.0",
+    "restify": "~7.2.1",
     "scuttlebutt": "~5.6.8",
-    "yargs": "~8.0.2"
+    "uuid": "~3.2.1",
+    "yargs": "~11.0.0"
   },
   "devDependencies": {
-    "coveralls": "*",
-    "eslint": "2.*",
-    "mocha": "2.*",
+    "coveralls": "~3.0.1",
+    "eslint-config-ceejbot": "~1.1.2",
+    "mocha": "~5.2.0",
     "must": "~0.13.1",
-    "nyc": "5.*",
-    "rimraf": "~2.5.2"
+    "nyc": "~12.0.2",
+    "rimraf": "~2.6.2",
+    "xo": "~0.21.1"
   },
-  "gitHead": "8b34720988b12cfb98a7c9c406f0e80e7d43974c",
+  "directories": {
+    "example": "examples",
+    "lib": "lib",
+    "test": "test"
+  },
+  "homepage": "https://github.com/ceejbot/scurry#readme",
   "keywords": [
+    "autosharding",
     "leveldb",
-    "scuttlebutt",
-    "autosharding"
+    "scuttlebutt"
   ],
   "license": "MIT",
   "main": "index.js",
-  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ceejbot/scurry"
+    "url": "git+https://github.com/ceejbot/scurry.git"
   },
   "scripts": {
-    "start": "node index.js --id=server -m -g 4114 -p 3333 --dbpath=./db | ./node_modules/.bin/bunyan -o short",
-    "node1": "node index.js -c ./examples/server.json | ./node_modules/.bin/bunyan -o short",
-    "node2": "node index.js -c ./examples/node-two.json | ./node_modules/.bin/bunyan -o short",
-    "node3": "node index.js -c ./examples/node-three.json | ./node_modules/.bin/bunyan -o short",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "xo",
+    "node1": "node index.js -c ./examples/server.json | bistre",
+    "node2": "node index.js -c ./examples/node-two.json | bistre",
+    "node3": "node index.js -c ./examples/node-three.json | bistre",
+    "start": "node index.js --id=server -m -g 4114 -p 3333 --dbpath=./db | bistre",
     "test": "nyc mocha -R spec",
-    "lint": "eslint index.js lib test",
-    "travis": "npm test && npm run coverage",
-    "coverage": "nyc report --reporter=text-lcov | coveralls"
+    "travis": "npm test && npm run coverage"
+  },
+  "xo": {
+    "extends": "eslint-config-ceejbot",
+    "rules": {
+      "unicorn/no-process-exit": 0,
+      "prefer-destructuring": 0
+    }
   }
 }

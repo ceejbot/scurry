@@ -91,7 +91,7 @@ util.inherits(Keystream, stream.Readable);
 
 Keystream.prototype._read = function(size)
 {
-	if (!this.keys.length)
+	if (this.keys.length === 0)
 		return this.push(null);
 	this.push(JSON.stringify(this.keys.shift()));
 };

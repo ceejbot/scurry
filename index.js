@@ -1,9 +1,8 @@
 // Pull all the pieces in lib together to construct a server
 
 var
-	assert  = require('assert'),
 	Mesh    = require('./lib/mesh'),
-	localip = require("my-local-ip")(),
+	localip = require('my-local-ip')(),
 	options = require('yargs')
 		.usage('Run a single node in the mesh.\nIf you pass a config file, none of the other options are considered.\nUsage: $0 --id=node-one -p 3000 -g 4114 --dbpath=./db\n       $0 --config=./node-one.json')
 		.alias('c', 'config')
@@ -23,9 +22,9 @@ var
 		.describe('s', 'hostname of the gossip server to connect to')
 	;
 
-options.check(function(args)
+options.check(args =>
 {
-	return (args.c || (!!args.id && !!args.g && !!args.d));
+	return (args.c || (Boolean(args.id) && Boolean(args.g) && Boolean(args.d)));
 });
 
 var opts;
@@ -51,13 +50,13 @@ var mesh = new Mesh(opts);
 process.on('SIGINT', mesh.disconnect.bind(mesh));
 
 mesh.connect()
-.then(function()
-{
-	mesh.join();
-})
-.fail(function(err)
-{
-	console.log(err);
-	process.exit(1);
-})
-.done();
+	.then(() =>
+	{
+		mesh.join();
+	})
+	.fail(err =>
+	{
+		console.log(err);
+		process.exit(1);
+	})
+	.done();

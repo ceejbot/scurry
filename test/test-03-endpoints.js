@@ -13,28 +13,28 @@ function requestFromTestServer(opts, payload, collect, callback)
 	opts.port =   4000;
 	opts.headers = { 'content-type': 'application/json' };
 
-	var req = http.request(opts, function(response)
+	var req = http.request(opts, response =>
 	{
 		if (!collect)
 			return callback(null, response);
 
 		var body;
-		response.on('data', function(data)
+		response.on('data', data =>
 		{
 			if (body)
 				body = Buffer.concat(body, data);
 			else
 				body = data;
 		});
-		response.on('end', function()
+		response.on('end', () =>
 		{
 			callback(null, response, JSON.parse(body));
 		});
-		response.on('error', function(err)
+		response.on('error', err =>
 		{
 			callback(err, response);
 		});
-	}).on('error', function(err)
+	}).on('error', err =>
 	{
 		callback(err);
 	});
@@ -46,15 +46,15 @@ function requestFromTestServer(opts, payload, collect, callback)
 
 var mesh = new MockMesh({ count: 5 });
 
-describe('REST api', function()
+describe('REST api', () =>
 {
 	var server;
 	var obj1 = { name: 'I am a test value.' };
 	var id1;
 
-	describe('createServer()', function()
+	describe('createServer()', () =>
 	{
-		it('demands an options object with a mesh', function()
+		it('demands an options object with a mesh', () =>
 		{
 			function shouldThrow()
 			{
@@ -64,25 +64,25 @@ describe('REST api', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('createServer() returns a configured restify server', function()
+		it('createServer() returns a configured restify server', () =>
 		{
-			var s = endpoints.createServer({ mesh: mesh });
+			var s = endpoints.createServer({ mesh });
 			s.name.must.equal('restify');
 			s.routes.must.exist();
 			s.chain.must.exist();
 		});
 
-		it('has custom middleware for scurry', function()
+		it('has custom middleware for scurry', () =>
 		{
-			var s = endpoints.createServer({ mesh: mesh });
+			var s = endpoints.createServer({ mesh });
 			var middleware = s.chain;
 			middleware[0].name.must.equal('domainWrapper');
 			middleware[5].name.must.equal('extractTTLHeader');
 		});
 
-		it('listens on the given port', function(done)
+		it('listens on the given port', done =>
 		{
-			server = endpoints.createServer({ mesh: mesh, name: 'unittests' });
+			server = endpoints.createServer({ mesh, name: 'unittests' });
 			server.listen(4000);
 
 			var opts =
@@ -90,7 +90,7 @@ describe('REST api', function()
 				path: '/ping',
 				method: 'GET'
 			};
-			requestFromTestServer(opts, null, true, function(err, response, body)
+			requestFromTestServer(opts, null, true, (err, response, body) =>
 			{
 				demand(err).must.not.exist();
 				response.statusCode.must.equal(200);
@@ -100,12 +100,12 @@ describe('REST api', function()
 		});
 	});
 
-	describe('POST /:bucket', function()
+	describe('POST /:bucket', () =>
 	{
 		it('demands JSON data');
 		it('has tests for bogus requests, e.g., bad form data');
 
-		it('stores the posted object in the mesh', function(done)
+		it('stores the posted object in the mesh', done =>
 		{
 			var opts =
 			{
@@ -113,7 +113,7 @@ describe('REST api', function()
 				method: 'POST',
 			};
 
-			requestFromTestServer(opts, JSON.stringify(obj1), true, function(err, response, body)
+			requestFromTestServer(opts, JSON.stringify(obj1), true, (err, response, body) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(201);
@@ -125,11 +125,11 @@ describe('REST api', function()
 		});
 	});
 
-	describe('PUT /:bucket/:id', function()
+	describe('PUT /:bucket/:id', () =>
 	{
 		it('demands JSON data');
 
-		it('stores the posted object in the given bucket & key', function(done)
+		it('stores the posted object in the given bucket & key', done =>
 		{
 			var opts =
 			{
@@ -137,7 +137,7 @@ describe('REST api', function()
 				method: 'PUT',
 			};
 
-			requestFromTestServer(opts, JSON.stringify(obj1), false, function(err, response)
+			requestFromTestServer(opts, JSON.stringify(obj1), false, (err, response) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(204);
@@ -145,26 +145,26 @@ describe('REST api', function()
 				var node = mesh.locate('test', '1');
 				node, 'mock mesh failure, no node'.must.exist();
 				node.get('test', '1')
-				.then(function(v)
-				{
-					v.must.exist();
-					done();
-				})
-				.fail(function(err)
-				{
-					console.log(err);
-					demand(err).not.exist();
-				}).done();
+					.then(v =>
+					{
+						v.must.exist();
+						done();
+					})
+					.fail(err =>
+					{
+						console.log(err);
+						demand(err).not.exist();
+					}).done();
 			});
 		});
 
 	});
 
-	describe('GET /:bucket/:id', function()
+	describe('GET /:bucket/:id', () =>
 	{
 		var previousEtag;
 
-		it('GET sends back an ETag header', function(done)
+		it('GET sends back an ETag header', done =>
 		{
 			var opts =
 			{
@@ -172,7 +172,7 @@ describe('REST api', function()
 				method: 'GET',
 			};
 
-			requestFromTestServer(opts, null, true, function(err, response, body)
+			requestFromTestServer(opts, null, true, (err, response, body) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(200);
@@ -187,7 +187,7 @@ describe('REST api', function()
 
 		});
 
-		it('GET sends back the same ETag header for unchanged data', function(done)
+		it('GET sends back the same ETag header for unchanged data', done =>
 		{
 			var opts =
 			{
@@ -195,7 +195,7 @@ describe('REST api', function()
 				method: 'GET',
 			};
 
-			requestFromTestServer(opts, null, true, function(err, response)
+			requestFromTestServer(opts, null, true, (err, response) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(200);
@@ -207,11 +207,11 @@ describe('REST api', function()
 		it('GET sends a last-modified header');
 	});
 
-	describe('HEAD /:bucket/:id', function()
+	describe('HEAD /:bucket/:id', () =>
 	{
 		it('has tests');
 
-		it('responds with headers for an item', function(done)
+		it('responds with headers for an item', done =>
 		{
 			var opts =
 			{
@@ -219,7 +219,7 @@ describe('REST api', function()
 				method: 'HEAD',
 			};
 
-			requestFromTestServer(opts, null, false, function(err, response)
+			requestFromTestServer(opts, null, false, (err, response) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(200);
@@ -232,9 +232,9 @@ describe('REST api', function()
 		});
 	});
 
-	describe('GET /:bucket', function()
+	describe('GET /:bucket', () =>
 	{
-		it('?keys=true responds with a key stream', function(done)
+		it('?keys=true responds with a key stream', done =>
 		{
 			var opts =
 			{
@@ -242,19 +242,19 @@ describe('REST api', function()
 				method: 'GET',
 			};
 
-			requestFromTestServer(opts, null, false, function(err, response)
+			requestFromTestServer(opts, null, false, (err, response) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(200);
 				var count = 0;
 
-				response.on('data', function(chunk)
+				response.on('data', chunk =>
 				{
 					count++;
 					// console.log(chunk);
 				});
 
-				response.on('end', function()
+				response.on('end', () =>
 				{
 					// count.must.equal(2);
 					done();
@@ -268,11 +268,11 @@ describe('REST api', function()
 
 	});
 
-	describe('DEL /:bucket/:id', function()
+	describe('DEL /:bucket/:id', () =>
 	{
 		it('has tests');
 
-		it('removes the specified object from the mesh', function(done)
+		it('removes the specified object from the mesh', done =>
 		{
 			var opts =
 			{
@@ -280,7 +280,7 @@ describe('REST api', function()
 				method: 'DELETE',
 			};
 
-			requestFromTestServer(opts, null, false, function(err, response)
+			requestFromTestServer(opts, null, false, (err, response) =>
 			{
 				demand(err).not.exist();
 				response.statusCode.must.equal(204);
@@ -288,15 +288,15 @@ describe('REST api', function()
 				var node = mesh.locate('test', '1');
 				node, 'mock mesh failure, no node'.must.exist();
 				node.get('test', '1')
-				.then(function(v)
-				{
-					demand(v).not.exist();
-					done();
-				})
-				.fail(function(err)
-				{
-					demand(err).not.exist();
-				}).done();
+					.then(v =>
+					{
+						demand(v).not.exist();
+						done();
+					})
+					.fail(err =>
+					{
+						demand(err).not.exist();
+					}).done();
 			});
 		});
 	});

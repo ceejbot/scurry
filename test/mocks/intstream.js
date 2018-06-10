@@ -38,7 +38,7 @@ IntegerStream.prototype.generate = function()
 		if (!this.checkDone())
 			this.value = this.value + Math.floor(Math.random() * 50) + 1;
 	}
-}
+};
 
 IntegerStream.prototype._read = function(size)
 {

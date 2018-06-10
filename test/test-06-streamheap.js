@@ -34,7 +34,7 @@ function hasHeapProperty(m)
 	return true;
 }
 
-describe('min BinaryHeap', function()
+describe('min BinaryHeap', () =>
 {
 	var testItems = [];
 	var testmin;
@@ -42,12 +42,12 @@ describe('min BinaryHeap', function()
 	{
 		var value = Math.floor(Math.random() * 1000);
 
-		if ((testmin === undefined)|| (value < testmin))
+		if ((testmin === undefined) || (value < testmin))
 			testmin = value;
-		testItems.push({ id: ''+value, value: value });
+		testItems.push({ id: String(value), value });
 	}
 
-	it('can be constructed', function()
+	it('can be constructed', () =>
 	{
 		var m = new Heap();
 		m.heap.must.be.an.array();
@@ -56,7 +56,7 @@ describe('min BinaryHeap', function()
 		demand(m.heap[0]).be.null();
 	});
 
-	it('insert() adds a node', function()
+	it('insert() adds a node', () =>
 	{
 		var item = { id: 'item', value: 3};
 		var m = new Heap();
@@ -68,7 +68,7 @@ describe('min BinaryHeap', function()
 		m.heap[1].id.must.equal(item.id);
 	});
 
-	it('insert() keeps the heap sorted', function()
+	it('insert() keeps the heap sorted', () =>
 	{
 		var m = new Heap();
 		m.insert({ id: 'max', value: 42});
@@ -81,7 +81,7 @@ describe('min BinaryHeap', function()
 		m.heap[2].id.must.equal('max');
 	});
 
-	it('hasHeapProperty() is a valid test', function()
+	it('hasHeapProperty() is a valid test', () =>
 	{
 		function badheap()
 		{
@@ -94,7 +94,7 @@ describe('min BinaryHeap', function()
 		badheap.must.throw();
 	});
 
-	it('insert() keeps it sorted through a handful of inserts', function()
+	it('insert() keeps it sorted through a handful of inserts', () =>
 	{
 		var m = new Heap();
 		for (var i = 0; i < testItems.length; i++)
@@ -111,7 +111,7 @@ describe('min BinaryHeap', function()
 		hasHeapProperty(m).must.be.true();
 	});
 
-	it('minHeapify() keeps the heap ordered after a value update', function()
+	it('minHeapify() keeps the heap ordered after a value update', () =>
 	{
 		var m = new Heap();
 		for (var i = 0; i < testItems.length; i++)
@@ -130,7 +130,7 @@ describe('min BinaryHeap', function()
 		m.size.must.equal(testItems.length);
 	});
 
-	it('bubble(i) removes the node at i & rebalances', function()
+	it('bubble(i) removes the node at i & rebalances', () =>
 	{
 		var m = new Heap();
 		for (var i = 0; i < testItems.length; i++)
@@ -141,7 +141,7 @@ describe('min BinaryHeap', function()
 		hasHeapProperty(m).must.be.true();
 	});
 
-	it('removeHead() removes the head node', function()
+	it('removeHead() removes the head node', () =>
 	{
 		var m = new Heap();
 		for (var i = 0; i < testItems.length; i++)
@@ -153,7 +153,7 @@ describe('min BinaryHeap', function()
 		head.value.must.be.lte(m.heap[1].value);
 	});
 
-	it('bubble() can be called on the last node', function()
+	it('bubble() can be called on the last node', () =>
 	{
 		var m = new Heap();
 		for (var i = 0; i < testItems.length; i++)
@@ -165,24 +165,24 @@ describe('min BinaryHeap', function()
 	});
 });
 
-describe('Muxer', function()
+describe('Muxer', () =>
 {
-	it('can be constructed', function()
+	it('can be constructed', () =>
 	{
 		var m = new muxer.Muxer([]);
 	});
 
 });
 
-describe('muxStreams()', function()
+describe('muxStreams()', () =>
 {
-	it('takes an array of readable streams', function()
+	it('takes an array of readable streams', () =>
 	{
 		function bad() { return muxer.muxStreams(); }
 		bad.must.throw();
 	});
 
-	it('returns a MuxedStream', function()
+	it('returns a MuxedStream', () =>
 	{
 		var result = muxer.muxStreams([]);
 		result.must.be.instanceOf(muxer.MuxedStream);
@@ -195,19 +195,19 @@ describe('muxStreams()', function()
 		var values = [];
 
 		var result = muxer.muxStreams([new IntStream(desired)]);
-		result.on('data', function(v)
+		result.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(desired);
-			for (var i = 0; i < values.length - 1; i++)
+			.on('end', () =>
 			{
-				values[i].must.be.lte(values[i + 1]);
-			}
-			done();
-		});
+				values.length.must.equal(desired);
+				for (var i = 0; i < values.length - 1; i++)
+				{
+					values[i].must.be.lte(values[i + 1]);
+				}
+				done();
+			});
 	});
 
 	it('muxes two streams into sorted order', function(done)
@@ -217,19 +217,19 @@ describe('muxStreams()', function()
 		var values = [];
 
 		var result = muxer.muxStreams([new IntStream(desired), new IntStream(desired)]);
-		result.on('data', function(v)
+		result.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(desired * 2);
-			for (var i = 0; i < values.length - 1; i++)
+			.on('end', () =>
 			{
-				values[i].must.be.lte(values[i + 1]);
-			}
-			done();
-		});
+				values.length.must.equal(desired * 2);
+				for (var i = 0; i < values.length - 1; i++)
+				{
+					values[i].must.be.lte(values[i + 1]);
+				}
+				done();
+			});
 	});
 
 	it('muxes three longer streams into sorted order', function(done)
@@ -243,19 +243,19 @@ describe('muxStreams()', function()
 		var values = [];
 
 		var result = muxer.muxStreams(streams);
-		result.on('data', function(v)
+		result.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(desired * 3);
-			for (var i = 0; i < values.length - 1; i++)
+			.on('end', () =>
 			{
-				values[i].must.be.lte(values[i + 1]);
-			}
-			done();
-		});
+				values.length.must.equal(desired * 3);
+				for (var i = 0; i < values.length - 1; i++)
+				{
+					values[i].must.be.lte(values[i + 1]);
+				}
+				done();
+			});
 	});
 
 	it('muxes ten longer streams into sorted order', function(done)
@@ -269,51 +269,50 @@ describe('muxStreams()', function()
 		var values = [];
 
 		var outstream = muxer.muxStreams(streams);
-		outstream.on('data', function(v)
+		outstream.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(desired * 10, 'expected 1000 items');
-			for (var i = 0; i < values.length - 1; i++)
+			.on('end', () =>
 			{
-				values[i].must.be.lte(values[i + 1]);
-			}
-			done();
-		});
+				values.length.must.equal(desired * 10, 'expected 1000 items');
+				for (var i = 0; i < values.length - 1; i++)
+				{
+					values[i].must.be.lte(values[i + 1]);
+				}
+				done();
+			});
 	});
 
-	it('handles a stream with no data', function(done)
+	it('handles a stream with no data', done =>
 	{
 		var outstream = muxer.muxStreams([new IntStream(0)]);
 		var values = [];
 
-		outstream.on('data', function(v)
+		outstream.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(0);
-			done();
-		});
+			.on('end', () =>
+			{
+				values.length.must.equal(0);
+				done();
+			});
 	});
 
-
-	it('handles several streams with 1 item', function(done)
+	it('handles several streams with 1 item', done =>
 	{
 		var values = [];
 
 		var outstream = muxer.muxStreams([new IntStream(1), new IntStream(0), new IntStream(3)]);
-		outstream.on('data', function(v)
+		outstream.on('data', v =>
 		{
 			values.push(v);
 		})
-		.on('end', function()
-		{
-			values.length.must.equal(4);
-			done();
-		});
+			.on('end', () =>
+			{
+				values.length.must.equal(4);
+				done();
+			});
 	});
 });

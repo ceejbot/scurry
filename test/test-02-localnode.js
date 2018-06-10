@@ -16,40 +16,40 @@ function nodeFixture()
 	return node;
 }
 
-describe('LocalNode', function()
+describe('LocalNode', () =>
 {
 	var node = nodeFixture();
 
-	describe('constructor', function()
+	describe('constructor', () =>
 	{
-		it('throws if no options passed', function()
+		it('throws if no options passed', () =>
 		{
 			function shouldThrow()
 			{
-				var node = new LocalNode();
+				new LocalNode();
 			}
 			shouldThrow.must.throw(/options/);
 		});
 
-		it('throws if no ID passed', function()
+		it('throws if no ID passed', () =>
 		{
 			function shouldThrow()
 			{
-				var node = new LocalNode({ foo: 'bar' });
+				new LocalNode({ foo: 'bar' });
 			}
 			shouldThrow.must.throw(/ID/);
 		});
 
-		it('throws if no dbpath passed', function()
+		it('throws if no dbpath passed', () =>
 		{
 			function shouldThrow()
 			{
-				var node = new LocalNode({ id: 'bar' });
+				new LocalNode({ id: 'bar' });
 			}
 			shouldThrow.must.throw(/dbpath/);
 		});
 
-		it('can construct a node when passed the required options', function(done)
+		it('can construct a node when passed the required options', done =>
 		{
 			var opts =
 			{
@@ -65,17 +65,17 @@ describe('LocalNode', function()
 			node.db.close(done);
 		});
 
-		it('creates the dbpath if needed', function(done)
+		it('creates the dbpath if needed', done =>
 		{
 			fs.existsSync('./test/t2').must.be.false();
 			var opts = { id: 'test-id', dbpath: './test/t2' };
 			var node = new LocalNode(opts);
 
-				fs.existsSync('./test/t2').must.be.true();
-				node.db.close(done);
+			fs.existsSync('./test/t2').must.be.true();
+			node.db.close(done);
 		});
 
-		it('wraps the db with level-sublevel', function(done)
+		it('wraps the db with level-sublevel', done =>
 		{
 			var opts = { id: 'test-id', dbpath: './test/t1' };
 			var node = new LocalNode(opts);
@@ -86,7 +86,7 @@ describe('LocalNode', function()
 			db.close(done);
 		});
 
-		it('wraps the db with level-ttl', function(done)
+		it('wraps the db with level-ttl', done =>
 		{
 			var opts = { id: 'test-id', dbpath: './test/t1' };
 			var node = new LocalNode(opts);
@@ -98,9 +98,9 @@ describe('LocalNode', function()
 		});
 	});
 
-	describe('set()', function()
+	describe('set()', () =>
 	{
-		it('requires that you pass a string bucket', function()
+		it('requires that you pass a string bucket', () =>
 		{
 			function shouldThrow()
 			{
@@ -109,7 +109,7 @@ describe('LocalNode', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('requires that you pass a string id', function()
+		it('requires that you pass a string id', () =>
 		{
 			function shouldThrow()
 			{
@@ -118,89 +118,89 @@ describe('LocalNode', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('returns a promise', function(done)
+		it('returns a promise', done =>
 		{
 			var result = node.set('bucket', '1', 'I am a value.');
 			result.must.have.property('then');
 			result.then.must.be.a.function();
 
-			result.then(function(reply)
+			result.then(reply =>
 			{
 				reply.must.equal('OK');
 				done();
 			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			}).done();
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				}).done();
 		});
 
-		it('stores an object with crc & modification timestamp', function(done)
+		it('stores an object with crc & modification timestamp', done =>
 		{
 			node.get('bucket', '1')
-			.then(function(result)
-			{
-				result.must.exist();
-				result.must.be.an.object();
-				result.must.have.property('ts');
-				result.ts.must.be.a.number();
-				result.must.have.property('etag');
-				result.must.have.property('payload');
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(result =>
+				{
+					result.must.exist();
+					result.must.be.an.object();
+					result.must.have.property('ts');
+					result.ts.must.be.a.number();
+					result.must.have.property('etag');
+					result.must.have.property('payload');
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 
-		it('stores strings successfully', function(done)
+		it('stores strings successfully', done =>
 		{
 			node.get('bucket', '1')
-			.then(function(result)
-			{
-				result.must.be.an.object();
-				result.must.have.property('payload');
-				result.payload.must.be.a.string();
-				result.payload.must.be.a.string();
-				result.payload.must.equal('I am a value.');
+				.then(result =>
+				{
+					result.must.be.an.object();
+					result.must.have.property('payload');
+					result.payload.must.be.a.string();
+					result.payload.must.be.a.string();
+					result.payload.must.equal('I am a value.');
 
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 
-		it('stores buffers successfully', function(done)
+		it('stores buffers successfully', done =>
 		{
-			var buf = new Buffer(8);
+			var buf = Buffer.alloc(8);
 			buf.fill(1);
 
 			node.set('bucket', '2', buf)
-			.then(function()
-			{
-				return node.get('bucket', '2');
-			})
-			.then(function(result)
-			{
-				result.payload, 'no payload holding the value'.must.exist();
-				Buffer.isBuffer(result.payload).must.be.true();
-				result.payload.length.must.equal(8);
-				result.payload[0].must.equal(1);
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(() =>
+				{
+					return node.get('bucket', '2');
+				})
+				.then(result =>
+				{
+					result.payload, 'no payload holding the value'.must.exist();
+					Buffer.isBuffer(result.payload).must.be.true();
+					result.payload.length.must.equal(8);
+					result.payload[0].must.equal(1);
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 
-		it('stores objects successfully', function(done)
+		it('stores objects successfully', done =>
 		{
 			var value =
 			{
@@ -210,138 +210,138 @@ describe('LocalNode', function()
 			};
 
 			node.set('bucket', '3', value)
-			.then(function()
-			{
-				return node.get('bucket', '3');
-			})
-			.then(function(result)
-			{
-				var stored = result.payload;
-				stored.must.be.an.object();
-				stored.foo.must.exist();
-				stored.foo.must.equal('foo');
-				stored.bar.must.exist();
-				stored.bar.must.equal('bar');
-				stored.baz.must.exist();
-				stored.baz.must.be.an.array();
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
-		});
-
-		it('stores binary data successfully', function(done)
-		{
-			fs.readFile('./test/mocks/data.png', function(err, data)
-			{
-				demand(err).not.exist();
-				node.set('bucket', '4', data, { 'content-type': 'image/png' })
-				.then(function()
+				.then(() =>
 				{
-					return node.get('bucket', '4');
+					return node.get('bucket', '3');
 				})
-				.then(function(result)
+				.then(result =>
 				{
-					result.must.have.property('payload');
-					Buffer.isBuffer(result.payload).must.be.true();
-					result['content-type'].must.equal('image/png', 'content type was not stored');
+					var stored = result.payload;
+					stored.must.be.an.object();
+					stored.foo.must.exist();
+					stored.foo.must.equal('foo');
+					stored.bar.must.exist();
+					stored.bar.must.equal('bar');
+					stored.baz.must.exist();
+					stored.baz.must.be.an.array();
 					done();
 				})
-				.fail(function(err)
+				.fail(err =>
 				{
 					demand(err).not.exist();
 				})
 				.done();
+		});
+
+		it('stores binary data successfully', done =>
+		{
+			fs.readFile('./test/mocks/data.png', (err, data) =>
+			{
+				demand(err).not.exist();
+				node.set('bucket', '4', data, { 'content-type': 'image/png' })
+					.then(() =>
+					{
+						return node.get('bucket', '4');
+					})
+					.then(result =>
+					{
+						result.must.have.property('payload');
+						Buffer.isBuffer(result.payload).must.be.true();
+						result['content-type'].must.equal('image/png', 'content type was not stored');
+						done();
+					})
+					.fail(err =>
+					{
+						demand(err).not.exist();
+					})
+					.done();
 			});
 		});
 
 	});
 
-	describe('get()', function()
+	describe('get()', () =>
 	{
-		it('returns a promise', function()
+		it('returns a promise', () =>
 		{
 			var result = node.get('bucket', '1');
 			result.must.have.property('then');
 			result.then.must.be.a.function();
 		});
 
-		it('can fetch a previously-stored value', function(done)
+		it('can fetch a previously-stored value', done =>
 		{
 			node.get('bucket', '1')
-			.then(function(result)
-			{
-				result.must.exist();
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(result =>
+				{
+					result.must.exist();
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 
-		it('returns an empty value for non-existent keys', function(done)
+		it('returns an empty value for non-existent keys', done =>
 		{
 			node.get('bucket', '12')
-			.then(function(result)
-			{
-				demand(result).be.null();
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(result =>
+				{
+					demand(result).be.null();
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 	});
 
-	describe('del()', function()
+	describe('del()', () =>
 	{
-		it('returns a promise', function()
+		it('returns a promise', () =>
 		{
 			var result = node.del('bucket', '1');
 			result.must.have.property('then');
 			result.then.must.be.a.function();
 		});
 
-		it('removes an item from storage', function(done)
+		it('removes an item from storage', done =>
 		{
 			node.get('bucket', '1')
-			.then(function(result)
-			{
-				demand(result).be.null();
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(result =>
+				{
+					demand(result).be.null();
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 
-		it('is silent when removing an item that does not exist', function(done)
+		it('is silent when removing an item that does not exist', done =>
 		{
 			node.del('bucket', '1')
-			.then(function(reply)
-			{
-				reply.must.exist();
-				reply.must.equal('OK');
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(reply =>
+				{
+					reply.must.exist();
+					reply.must.equal('OK');
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 	});
 
-	describe('TTLs', function()
+	describe('TTLs', () =>
 	{
 		it('can set a TTL on a key', function(done)
 		{
@@ -349,41 +349,41 @@ describe('LocalNode', function()
 			function checkKey()
 			{
 				node.get('bucket', '4')
-				.then(function(value)
-				{
-					demand(value).be.null();
-					done();
-				}).done();
+					.then(value =>
+					{
+						demand(value).be.null();
+						done();
+					}).done();
 			}
 
 			node.set('bucket', '4', 'dead value walking', { ttl: 500 })
-			.then(function(reply)
-			{
-				setTimeout(checkKey, 2000);
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+				.then(reply =>
+				{
+					setTimeout(checkKey, 2000);
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 	});
 
-	describe('keys()', function()
+	describe('keys()', () =>
 	{
-		it('gets keys() for the given bucket', function(done)
+		it('gets keys() for the given bucket', done =>
 		{
 			var keys = [];
 			var kstream = node.keys('bucket');
 			kstream.must.have.property('on');
 			kstream.on.must.be.a.function();
 
-			kstream.on('data', function(key)
+			kstream.on('data', key =>
 			{
 				keys.push(key);
 			});
 
-			kstream.on('end', function()
+			kstream.on('end', () =>
 			{
 				keys.length.must.equal(2);
 				keys[0].must.equal('2');
@@ -393,29 +393,29 @@ describe('LocalNode', function()
 		});
 	});
 
-	describe('shutdown', function()
+	describe('shutdown', () =>
 	{
-		it('closes the db', function(done)
+		it('closes the db', done =>
 		{
 			node.shutdown()
-			.then(function(reply)
-			{
+				.then(reply =>
+				{
 				// silence on success?
-				done();
-			})
-			.fail(function(err)
-			{
-				demand(err).not.exist();
-			})
-			.done();
+					done();
+				})
+				.fail(err =>
+				{
+					demand(err).not.exist();
+				})
+				.done();
 		});
 	});
 
-	after(function(done)
+	after(done =>
 	{
-		rimraf('./test/t1', function(err)
+		rimraf('./test/t1', err =>
 		{
-			rimraf('./test/t2', function(err)
+			rimraf('./test/t2', err =>
 			{
 				rimraf('./test/t3', done);
 			});

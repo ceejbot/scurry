@@ -1,23 +1,19 @@
 /*global describe:true, it:true, before:true, after:true */
 
-var
+'use strict';
+
+const
 	demand = require('must'),
 	Mesh = require('../lib/mesh'),
 	LightCycle = require('light-cycle');
 
-var testOptions = {
-	id:     'testmesh',
-	gossip: 4114,
-	api:    3000
-};
-
 var testmesh;
 
-describe('Mesh', function()
+describe('Mesh', () =>
 {
-	describe('constructor', function()
+	describe('constructor', () =>
 	{
-		it('demands an options argument', function()
+		it('demands an options argument', () =>
 		{
 			function shouldThrow()
 			{
@@ -27,7 +23,7 @@ describe('Mesh', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('demands a `gossip` port option', function()
+		it('demands a `gossip` port option', () =>
 		{
 			function shouldThrow()
 			{
@@ -37,7 +33,7 @@ describe('Mesh', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('demands an `api` port option', function()
+		it('demands an `api` port option', () =>
 		{
 			function shouldThrow()
 			{
@@ -47,39 +43,39 @@ describe('Mesh', function()
 			shouldThrow.must.throw(Error);
 		});
 
-		it('constructs a mesh when all required data is provided', function()
+		it('constructs a mesh when all required data is provided', () =>
 		{
 			var m = new Mesh(
-			{
-				id:     'testmesh',
-				gossip: 4114,
-				api:    3000
-			});
+				{
+					id:     'testmesh',
+					gossip: 4114,
+					api:    3000
+				});
 
 			m.must.exist();
 			m.id.must.equal('testmesh');
 		});
 
-		it('generates a unique ID if one is not provided', function()
+		it('generates a unique ID if one is not provided', () =>
 		{
 			var m = new Mesh(
-			{
-				gossip: 4114,
-				api:    3000
-			});
+				{
+					gossip: 4114,
+					api:    3000
+				});
 
 			m.must.have.property('id');
 			m.id.must.be.a.string();
 		});
 
-		it('creates a restify server using lib/endpoints', function()
+		it('creates a restify server using lib/endpoints', () =>
 		{
 			var m = new Mesh(
-			{
-				id:     'testmesh',
-				gossip: 4114,
-				api:    3000
-			});
+				{
+					id:     'testmesh',
+					gossip: 4114,
+					api:    3000
+				});
 
 			m.must.have.property('restify');
 			m.restify.must.be.an.object();
@@ -87,34 +83,34 @@ describe('Mesh', function()
 			m.restify.listen.must.be.a.function();
 		});
 
-		it('creates a lightcycle hash ring of the specified size', function()
+		it('creates a lightcycle hash ring of the specified size', () =>
 		{
 			var m = new Mesh(
-			{
-				id:     'testmesh',
-				gossip: 4114,
-				api:    3000
-			});
+				{
+					id:     'testmesh',
+					gossip: 4114,
+					api:    3000
+				});
 
 			m.must.have.property('cycle');
 			m.cycle.must.be.instanceof(LightCycle);
 		});
 
-		it('creates a CRDT document', function()
+		it('creates a CRDT document', () =>
 		{
 			var m = new Mesh(
-			{
-				id:     'testmesh',
-				gossip: 4114,
-				api:    3000
-			});
+				{
+					id:     'testmesh',
+					gossip: 4114,
+					api:    3000
+				});
 
 			m.must.have.property('meshdata');
 			m.meshdata.must.be.an.object();
 		});
 	});
 
-	describe('connect()', function()
+	describe('connect()', () =>
 	{
 		it('if a server, it listens on the gossip port');
 		it('if a client, it connects to the gossip port & host');
@@ -122,15 +118,15 @@ describe('Mesh', function()
 		it('starts the API server listening');
 	});
 
-	describe('join()', function()
+	describe('join()', () =>
 	{
 		it('adds a local node to the hash ring');
 		it('advertises this node to the scuttlebutt network using the document');
 	});
 
-	describe('locate()', function()
+	describe('locate()', () =>
 	{
-		it('demands bucket and id arguments', function()
+		it('demands bucket and id arguments', () =>
 		{
 			function shouldThrow()
 			{
@@ -144,31 +140,31 @@ describe('Mesh', function()
 		it('returns the matching node from the hash ring');
 	});
 
-	describe('handleJoiningNode()', function()
+	describe('handleJoiningNode()', () =>
 	{
 		it('is correctly fired when a remote or local node joins the mesh');
 		it('adds new remote nodes to the hash ring');
 	});
 
-	describe('handleLeavingNode()', function()
+	describe('handleLeavingNode()', () =>
 	{
 		it('is correctly fired when a remote or local node leaves the mesh');
 		it('removes departed remote nodes from the hash ring');
 
 	});
 
-	describe('handleChangingNode()', function()
+	describe('handleChangingNode()', () =>
 	{
 		it('does not do anything right now');
 	});
 
-	describe('leave()', function()
+	describe('leave()', () =>
 	{
 		it('removes this node from the shared document');
 		it('removes our local node from the hash ring');
 	});
 
-	describe('disconnect()', function()
+	describe('disconnect()', () =>
 	{
 		it('calls leave()');
 		it('shuts down all servers');

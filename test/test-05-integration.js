@@ -2,9 +2,7 @@
 
 var	demand = require('must');
 
-var mesh = require('../lib/mesh');
-
-describe('the network', function()
+describe('the network', () =>
 {
 	it('will eventually have tests that run several nodes');
 });
